@@ -1,1 +1,5 @@
 doc/ARINC424**
+doc/html/**
+doc/latex/**
+doc/man/**
+doc/rtf/**

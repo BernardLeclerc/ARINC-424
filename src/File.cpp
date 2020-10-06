@@ -2,6 +2,8 @@
 using namespace Arinc424;
 
 #include <iostream>
+using std::clog;
+using std::endl;
 
 namespace Arinc424
 {
@@ -17,26 +19,22 @@ namespace Arinc424
   {
   }
 
+  // Extraction operator
   std::istream &operator>>(std::istream &is, File &file)
   {
-    // Attempt to read exactly 132 characters
-    char line[133] = {0};
-    is.getline(line, 133);
+    // Start by assuming a fixed length
+    file.inputFormat = File::Format::FixedLengthFormat;
 
-    // Check how many characters were actually read
-    if (is.gcount() == 132)
-    {
-      // Section 6.2 specifies that "There will be at least one 132-character header record for each data file." a fixed-length format file requires at least one header record.
-      // If the input format is indeed a FixedLengthFormat, then the first 3 characters
-      // Process As Fixed Lenght Format
-      file.inputFormat = File::FixedLengthFormat;
-    }
-    // Is the stream still in good shape ?
-    else if (is.good())
-    {
-      // Assume an XML format
-      file.inputFormat = File::XmlFormat;
-    }
+    // If the file loads successfully, we're good !!
+    if (file.load(is)) return is;
+
+    // Attempt to rewind the stream ...
+    is.seekg(0);
+    if (!is.good()) return is;
+
+    // ... and try an XML format
+    file.inputFormat = File::Format::XmlFormat;
+    file.load(is);
 
     return is;
   }
@@ -45,4 +43,53 @@ namespace Arinc424
   {
     return status == 0;
   }
-}
+
+  bool File::load(std::istream &is)
+  {
+    switch(inputFormat)
+    {
+      case Format::FixedLengthFormat:
+        return loadFromFixedLenght(is);
+
+      case Format::XmlFormat:
+        return loadFromXmlFormat(is);
+
+      case Format::UnknownFormat:
+      default:
+        *log << "Cannot load the Arinc424::File object from an unknown input stream" << endl;
+        return false;
+    }
+  }
+
+  bool File::loadFromFixedLenght(std::istream &is)
+  {
+    while (!is.eof())
+    {
+      // A line is a null-terminated string of 132 characters
+      char line[133] = {0};
+
+      // Attempt to read exactly 132 characters
+      is.getline(line, 133);
+
+      // Check how many characters were actually read
+      if (is.gcount() == 132)
+      {
+        process(line);
+      }
+    }
+
+    return false;
+  }
+
+  /// \todo Implement loadFromXmlFormat()
+  bool File::loadFromXmlFormat(std::istream &is)
+  {
+    return false;
+  }
+
+  /// \todo Implement process()
+  bool File::process(const char line[])
+  {
+    return false;
+  }
+} // namespace Arinc424
