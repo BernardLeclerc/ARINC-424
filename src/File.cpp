@@ -1,17 +1,53 @@
 #include "File.h"
 using namespace Arinc424;
+using std::string;
 
 #include <iostream>
+using std::istream;
+using std::ostream;
 using std::clog;
 using std::endl;
 
+namespace
+{
+  /// \todo implement parseInt
+  int parseInt(const string &s)
+  {
+    return 0;
+  }
+
+  /// \todo implement isCycleDateValid
+  bool isCycleDateValid(const string &cycleDate)
+  {
+    return false;
+  }
+
+  /// \todo implement isDateValid
+  bool isDateValid(const string &date)
+  {
+    return false;
+  }
+
+  /// \todo implement isTimeValid
+  bool isTimeValid(const string &time)
+  {
+    return false;
+  }
+
+  /// \todo implement isBlank
+  bool isBlank(const string &s)
+  {
+    return false;
+  }
+} // namespace
 namespace Arinc424
 {
   File::File()
       : status(0),
         inputFormat(UnknownFormat),
         outputFormat(UnknownFormat),
-        log(&std::clog)
+        logStream(&clog),
+        numRecords(0)
   {
   }
 
@@ -20,7 +56,7 @@ namespace Arinc424
   }
 
   // Extraction operator
-  std::istream &operator>>(std::istream &is, File &file)
+  istream &operator>>(istream &is, File &file)
   {
     // Start by assuming a fixed length
     file.inputFormat = File::Format::FixedLengthFormat;
@@ -39,12 +75,27 @@ namespace Arinc424
     return is;
   }
 
+  std::ostream &operator<<(std::ostream &os, File::LogCodes code)
+  {
+    switch (code)
+    {
+    case File::LogCodes::Error:
+      return os << "Error";
+
+    case File::LogCodes::Warning:
+      return os << "Warning";
+
+    default:
+      return os << int(code);
+    }
+  }
+
   bool File::ok() const
   {
     return status == 0;
   }
 
-  bool File::load(std::istream &is)
+  bool File::load(istream &is)
   {
     switch(inputFormat)
     {
@@ -56,12 +107,12 @@ namespace Arinc424
 
       case Format::UnknownFormat:
       default:
-        *log << "Cannot load the Arinc424::File object from an unknown input stream" << endl;
+        log(Error) << "Cannot load the Arinc424::File object from an unknown input stream" << endl;
         return false;
     }
   }
 
-  bool File::loadFromFixedLenght(std::istream &is)
+  bool File::loadFromFixedLenght(istream &is)
   {
     while (!is.eof())
     {
@@ -74,22 +125,140 @@ namespace Arinc424
       // Check how many characters were actually read
       if (is.gcount() == 132)
       {
-        process(line);
+        processRecord(line);
       }
+    }
+
+    return ok();
+  }
+
+  /// \todo Implement loadFromXmlFormat()
+  bool File::loadFromXmlFormat(istream &is)
+  {
+    return false;
+  }
+
+  bool File::processRecord(const char line[])
+  {
+    // Each line is a record
+    string record(line);
+    ++numRecords;
+
+    // Determine the type of record?
+    switch (record[0])
+    {
+      case 'S':
+        return processStandardRecord(record);
+
+      case 'T':
+        return processTailoredRecord(record);
+
+      default:
+      {
+        // It might be a header record ?
+        if (record.substr(0, 3) == "HDR")
+        {
+          return processHeaderRecord(record);
+        }
+        else
+        {
+          log(Warning) << "Unrecognized ARINC-424 Supplement 22 record: '" << record << '\'' << endl;
+          unknownRecordList.push_back(record);
+        }
+      }
+    }
+    return false;
+  }
+
+  /// \todo Implement processStandardRecord
+  bool File::processStandardRecord(const string &record)
+  {
+    return false;
+  }
+
+  /// \todo Implement processTailoredRecord
+  bool File::processTailoredRecord(const string &record)
+  {
+    return false;
+  }
+
+  bool File::processHeaderRecord(const string &record)
+  {
+    // The header number is located in column 4 and 5
+    int headerNumber = parseInt(record.substr(3, 2));
+
+    // Supplement 22 defines only header 01 and 02 but allows additional headers from 03 to 99
+    switch (headerNumber)
+    {
+      case 1:
+        return processHeader01(record);
+
+      case 2:
+        return processHeader02(record);
+
+      default:
+        if (headerNumber > 2 && headerNumber < 100)
+        {
+          header.additionalRecords.push_back(record);
+          return true;
+        }
+        else
+        {
+          log(Error) << "Invalid header number: '" << record.substr(3, 2) << '\'' << endl;
+        }
+        
     }
 
     return false;
   }
 
-  /// \todo Implement loadFromXmlFormat()
-  bool File::loadFromXmlFormat(std::istream &is)
+  bool File::processHeader01(const std::string &record)
   {
-    return false;
+    bool valid = true;
+
+    header.filename = record.substr(5, 15);
+    header.versionNumber = parseInt(record.substr(20, 3));
+    valid &= header.versionNumber > 0 && header.versionNumber < 1000;
+    header.isProduction = record[23] == 'P';
+    valid &= !header.isProduction && record[23] == 'T';
+    header.recordLength = parseInt(record.substr(24, 4));
+    valid &= header.recordLength == 132;
+    header.recordCount = parseInt(record.substr(28, 7));
+    valid &= header.recordCount > 0 && header.recordCount < 10000000;
+    header.cycleDate = record.substr(35, 4);
+    valid &= isCycleDateValid(header.cycleDate);
+    valid &= record[39] == ' ';
+    header.creationDate = record.substr(41, 11);
+    valid &= isDateValid(header.creationDate);
+    header.creationTime = record.substr(52, 8);
+    valid &= isTimeValid(header.creationTime);
+    valid &= record[60] == ' ';
+    header.dataSupplierIdent = record.substr(61,16);
+    valid &= !isBlank(header.dataSupplierIdent);
+    header.targetCustomerIdent = record.substr(77, 16);
+    header.databasePartNumber = record.substr(93, 20);
+    valid &= isBlank(record.substr(113, 11));
+    header.fileCrc = parseInt(record.substr(124, 8));
+    valid &= header.fileCrc > 0 && header.fileCrc < 100000000;
+
+    return valid;
   }
 
-  /// \todo Implement process()
-  bool File::process(const char line[])
+  /// \todo implement processHeader02
+  bool File::processHeader02(const std::string &record)
   {
-    return false;
+    bool valid = true;
+
+    header.effectiveDate = record.substr(5, 11);
+    valid &= isDateValid(header.effectiveDate) || isBlank(header.effectiveDate);
+    header.expirationDate = record.substr(16, 11);
+    valid &= isDateValid(header.expirationDate) || isBlank(header.expirationDate);
+    valid &= record[27] == ' ';
+    header.supplierTextField = record.substr(28, 30);
+    header.descriptiveText = record.substr(58, 30);
+    valid &= isBlank(record.substr(88, 44));
+
+    return valid;
   }
+
 } // namespace Arinc424

@@ -19,6 +19,9 @@ namespace Arinc424
           mStringSize(stringSize)
         {
         }
+
+        virtual ~String() {}
+
       private:
         size_t mStringSize;
     };
