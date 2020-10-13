@@ -5,3 +5,4 @@ doc/latex/**
 doc/man/**
 doc/rtf/**
 data/CIFP_200910/**
+.vscode/**
