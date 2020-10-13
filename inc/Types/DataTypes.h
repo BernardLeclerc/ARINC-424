@@ -9,12 +9,7 @@ namespace Arinc424
     class Altitude
     {
       public:
-        Altitude()
-        :
-          isNotDefined(true),
-          isUnknown(false),
-          isFlightLevel(false)
-        {}
+        Altitude();
         virtual ~Altitude();
 
       private:
@@ -27,15 +22,8 @@ namespace Arinc424
     class AltitudeLimit : public Altitude
     {
     public:
-      AltitudeLimit()
-          : Altitude(),
-            isGround(false),
-            isMSL(false),
-            isNotam(false),
-            isNotSpecified(true),
-            isUnlimited(false)
-      {
-      }
+      AltitudeLimit();
+      virtual ~AltitudeLimit();
 
     private:
       bool isGround;

@@ -10,7 +10,7 @@ Up to Supplement 21, the ARINC-424 file format is a pure ASCII text file of exac
 ARINC-424 Specification - Available on the ARINC Store
 
 # How to Build
-On Linux Ubuntu with Visual Studio Code
+On Linux Ubuntu with Visual Studio Code and CMake.
 
 ## Dependencies
 GoogleTest:

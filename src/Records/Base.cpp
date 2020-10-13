@@ -1,6 +1,7 @@
-#include "Record/Base.h"
+#include "Records/Base.h"
 
 using namespace Arinc424::Record;
+using namespace Arinc424::Type;
 
 Base::Base()
 :
@@ -19,7 +20,7 @@ SupplementalData *Base::getSupplementalData()
   return pSupplementalData;
 }
 
-void Base::setSupplementalData(SupplementalData *pSupplementalData)
+void Base::setSupplementalData(SupplementalData *pData)
 {
   pSupplementalData = pData;
 }

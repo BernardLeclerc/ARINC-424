@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Type/SupplementalData.h"
+#include "Types/SupplementalData.h"
 
 namespace Arinc424
 {
@@ -12,11 +12,11 @@ namespace Arinc424
         Base();
         virtual ~Base();
 
-        SupplementalData *getSupplementalData();
-        void setSupplementalData(SupplementalData *pSupplementalData);
+        Type::SupplementalData *getSupplementalData();
+        void setSupplementalData(Type::SupplementalData *pSupplementalData);
 
       private:
-        SupplementalData *pSupplementalData;
+        Type::SupplementalData *pSupplementalData;
     };
   }
 }

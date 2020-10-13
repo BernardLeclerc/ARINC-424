@@ -8,7 +8,7 @@ using std::endl;
 #include <fstream>
 using std::ifstream;
 
-int Example_01(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   cout << "Example #1: How to read an ARINC-424 file using the C++ Extraction Operator" << endl;
 
