@@ -21,16 +21,16 @@ namespace Arinc424
 
     class AltitudeLimit : public Altitude
     {
-    public:
-      AltitudeLimit();
-      virtual ~AltitudeLimit();
+      public:
+        AltitudeLimit();
+        virtual ~AltitudeLimit();
 
-    private:
-      bool isGround;
-      bool isMSL;
-      bool isNotam;
-      bool isNotSpecified;
-      bool isUnlimited;
+      private:
+        bool isGround;
+        bool isMSL;
+        bool isNotam;
+        bool isNotSpecified;
+        bool isUnlimited;
     };
   } // namespace Type
 } // namespace Arinc424

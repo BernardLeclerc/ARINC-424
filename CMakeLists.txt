@@ -15,6 +15,7 @@ add_library(
 
   inc/File.h src/File.cpp
   inc/Reader.h src/Reader.cpp
+  inc/Header.h src/Header.cpp
 
   inc/Records/Airport.h src/Records/Airport.cpp
   inc/Records/Base.h src/Records/Base.cpp

@@ -10,8 +10,8 @@ namespace Arinc424
   class Header
   {
     public:
-      Header() {}
-      ~Header() {}
+      Header();
+      ~Header();
 
     public:
       std::string filename;             // 15-char

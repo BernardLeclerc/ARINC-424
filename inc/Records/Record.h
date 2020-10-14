@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Base.h"
+#include "Records/Base.h"
 
 namespace Arinc424
 {

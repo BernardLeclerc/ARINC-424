@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "Types/String.h"
 #include "Types/Altitude.h"
+
 #include <string>
 
 namespace Arinc424

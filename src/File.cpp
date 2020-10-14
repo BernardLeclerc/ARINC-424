@@ -114,20 +114,35 @@ namespace Arinc424
 
   bool File::loadFromFixedLenght(istream &is)
   {
-    while (!is.eof())
+    while (is.good())
     {
       // A line is a null-terminated string of 132 characters
       char line[133] = {0};
 
-      // Attempt to read exactly 132 characters
+      // A line from the stream is 132 characters plus the End-Of-Line (EOL) delimiter
       is.getline(line, 133);
 
       // Check how many characters were actually read
-      if (is.gcount() == 132)
+      if (is.gcount() == 133)
       {
         processRecord(line);
       }
+      else
+      {
+        // We've asked for 133 characters but we got something else; it's an error ...
+        // ... unless it's the end of the stream.
+        if (!is.eof())
+        {
+          log(Error) << "Unexpected number of characters on line " << numRecords << ": " << is.gcount() << endl;
+          break;
+        }
+        
+      }
+      
     }
+
+    // We succeeded if we have reached the end of the stream, otherwise we failed.
+    status = is.eof() ? 0 : 1;
 
     return ok();
   }
