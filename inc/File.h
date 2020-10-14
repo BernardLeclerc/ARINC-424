@@ -21,6 +21,18 @@ namespace Arinc424
       // True if the input stream has been parsed successfully; false otherwise.
       bool ok() const;
 
+      /// \returns The number of fixed-length records extracted from the input stream
+      size_t getNumRecords() const
+      {
+        return numRecords;
+      }
+
+      /// \returns The number of fixed-length records that are not properly formatted
+      size_t getNumIncorrectRecords() const
+      {
+        return numIncorrectRecords;
+      }
+
       // To determine what input format has been detected and what output format will be used.
       enum Format
       {
@@ -29,9 +41,18 @@ namespace Arinc424
         XmlFormat
       };
 
-      Format getInputFormat() const;
+      /// \brief Returns the input format that has been detected
+      Format getInputFormat() const
+      {
+        return inputFormat;
+      }
+
       bool setOutputFormat(Format format);
 
+      friend std::istream &operator>>(std::istream &is, File &file);
+      friend std::ostream &operator<<(std::ostream &os, File &file);
+
+    private:
       /// \brief Uses the indicated format to build the File object from the input stream.
       /// \details load is a wrapper for loadFromXmlFormat and loadFromFixedLenght.
       /// \return true if the File object was successfully loaded; false otherwise.
@@ -45,10 +66,6 @@ namespace Arinc424
       /// \return true if the File object was successfully loaded; false otherwise.
       bool loadFromFixedLenght(std::istream &is);
 
-      friend std::istream &operator>>(std::istream &is, File &file);
-      friend std::ostream &operator<<(std::ostream &os, File &file);
-
-    private:
       /// \brief Processes one line obtained from the input stream.
       /// \details Determines the type of records and then calls the appropriate method.
       /// \returns true if the record is properly formatted; false otherwise.
@@ -96,6 +113,14 @@ namespace Arinc424
 
       // The number of fixed length records (lines) read from the input stream.
       size_t numRecords;
+
+      // The number of records that are not properly formatted.
+      size_t numIncorrectRecords;
+
+      // Other counters for debugging and statistics purposes
+      size_t numStandardRecords;
+      size_t numTailoredRecords;
+      size_t numHeaderRecords;
 
       // List of Unknown records
       std::list<std::string> unknownRecordList;

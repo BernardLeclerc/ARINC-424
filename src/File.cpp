@@ -8,12 +8,19 @@ using std::ostream;
 using std::clog;
 using std::endl;
 
+#include <sstream>
+using std::istringstream;
+
 namespace
 {
-  /// \todo implement parseInt
+  /// \brief Converts a character string into an integer
+  /// \returns 0 when the convertion fails
   int parseInt(const string &s)
   {
-    return 0;
+    istringstream is(s);
+    int i = 0;
+    is >> i;
+    return is.fail() ? 0 : i;
   }
 
   /// \todo implement isCycleDateValid
@@ -47,7 +54,11 @@ namespace Arinc424
         inputFormat(UnknownFormat),
         outputFormat(UnknownFormat),
         logStream(&clog),
-        numRecords(0)
+        numRecords(0),
+        numIncorrectRecords(0),
+        numStandardRecords(0),
+        numTailoredRecords(0),
+        numHeaderRecords(0)
   {
   }
 
@@ -70,8 +81,10 @@ namespace Arinc424
 
     // ... and try an XML format
     file.inputFormat = File::Format::XmlFormat;
-    file.load(is);
+    if (file.load(is)) return is;
 
+    // Apparently, the input stream has an unsupported format
+    file.inputFormat = File::Format::UnknownFormat;
     return is;
   }
 
@@ -125,7 +138,10 @@ namespace Arinc424
       // Check how many characters were actually read
       if (is.gcount() == 133)
       {
-        processRecord(line);
+        if (!processRecord(line))
+        {
+          ++numIncorrectRecords;
+        }
       }
       else
       {
@@ -188,17 +204,21 @@ namespace Arinc424
   /// \todo Implement processStandardRecord
   bool File::processStandardRecord(const string &record)
   {
+    ++numStandardRecords;
     return false;
   }
 
   /// \todo Implement processTailoredRecord
   bool File::processTailoredRecord(const string &record)
   {
+    ++numTailoredRecords;
     return false;
   }
 
   bool File::processHeaderRecord(const string &record)
   {
+    ++numHeaderRecords;
+    
     // The header number is located in column 4 and 5
     int headerNumber = parseInt(record.substr(3, 2));
 
