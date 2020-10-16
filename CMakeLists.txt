@@ -32,3 +32,15 @@ target_link_libraries(HelloWorld Arinc424)
 
 add_executable(Example_01 samples/Example_01.cpp)
 target_link_libraries(Example_01 Arinc424)
+
+add_executable(
+  TestSuite
+  test/TestSuite.cpp
+  test/TestReader.cpp
+  )
+target_link_libraries(
+  TestSuite
+  Arinc424
+  gtest
+  pthread
+  )
