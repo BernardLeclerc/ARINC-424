@@ -18,7 +18,7 @@ Reader::~Reader()
   // Nothing special
 }
 
-// Opens the file, detects the format, loads its contents, and then closes it.
+// Opens the file and, if successful, loads its contents.
 bool Reader::load(const char *file)
 {
   if (file == nullptr)
@@ -30,7 +30,8 @@ bool Reader::load(const char *file)
   return inputFileStream.good() ? load(inputFileStream) : false;
 }
 
-bool Reader::load(istream &is)
+// Uses the extraction operator to load the content of the input stream into the internal File object.
+bool Reader::load(std::istream &is)
 {
   is >> file;
   return file.ok();

@@ -6,6 +6,7 @@ using namespace Arinc424;
 #include <gtest/gtest.h>
 
 #include <sstream>
+using std::istringstream;
 
 namespace Arinc424TestSuite
 {
@@ -36,7 +37,7 @@ namespace Arinc424TestSuite
   TEST(Reader, LoadFromEmptytream)
   {
     Reader reader;
-    std::istringstream is;
+    istringstream is;
     ASSERT_TRUE(reader.load(is));
   }
 

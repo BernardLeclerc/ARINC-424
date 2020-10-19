@@ -1,8 +1,4 @@
 build/**
 doc/ARINC424**
 doc/html/**
-doc/latex/**
-doc/man/**
-doc/rtf/**
 data/CIFP_200910/**
-.vscode/**
