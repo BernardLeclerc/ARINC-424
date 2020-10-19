@@ -15,10 +15,10 @@ namespace Arinc424
       File();
       ~File();
 
-      // True if no file or input stream has been processed yet
+      /// \returns True if no file or input stream has been processed yet; false otherwise.
       bool empty() const;
 
-      // True if the input stream has been parsed successfully; false otherwise.
+      /// \returns True if the input stream has been parsed successfully; false otherwise.
       bool ok() const;
 
       /// \returns The number of fixed-length records extracted from the input stream
@@ -33,7 +33,7 @@ namespace Arinc424
         return numIncorrectRecords;
       }
 
-      // To determine what input format has been detected and what output format will be used.
+      /// To determine what input format has been detected and what output format will be used.
       enum Format
       {
         UnknownFormat,
@@ -41,12 +41,13 @@ namespace Arinc424
         XmlFormat
       };
 
-      /// \brief Returns the input format that has been detected
+      /// \returns The input format that has been detected
       Format getInputFormat() const
       {
         return inputFormat;
       }
 
+      /// \todo Not defined yet
       bool setOutputFormat(Format format);
 
       friend std::istream &operator>>(std::istream &is, File &file);
@@ -100,6 +101,10 @@ namespace Arinc424
       }
       
     private:
+      // The internal status of the File object:
+      //  -1 = empty - the object contains no data
+      //   0 = successfully loaded - the object contains useful data
+      //   1 = unsuccessfully loaded - the object may (or may not) contain data that may (or may not) be useful
       int status;
 
       // The input format detected be the extraction operator

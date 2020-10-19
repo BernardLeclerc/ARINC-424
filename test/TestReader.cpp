@@ -1,21 +1,50 @@
 // Tests for the Reader class
 
 #include <Reader.h>
+using namespace Arinc424;
 
 #include <gtest/gtest.h>
 
+#include <sstream>
+
 namespace Arinc424TestSuite
 {
-  // Make sure that a Reader object can be instantiated on the stack
   TEST(Reader, CreateOnStack)
   {
-    Arinc424::Reader reader;
+    Reader reader;
   }
 
   TEST(Reader, CreateOnHeap)
   {
-    Arinc424::Reader *reader = new Arinc424::Reader;
+    Reader *reader = new Reader;
     EXPECT_NE(nullptr, reader);
     delete reader;
+  }
+
+  TEST(Reader, LoadFromNullPtr)
+  {
+    Reader reader;
+    ASSERT_FALSE(reader.load(nullptr));
+  }
+
+  TEST(Reader, LoadFromFile)
+  {
+    Reader reader;
+    ASSERT_FALSE(reader.load("A file that does not exist"));
+  }
+
+  TEST(Reader, LoadFromEmptytream)
+  {
+    Reader reader;
+    std::istringstream is;
+    ASSERT_TRUE(reader.load(is));
+  }
+
+  TEST(Reader, InitialState)
+  {
+    Reader reader;
+    File &file = reader.getFile();
+    ASSERT_TRUE(file.empty());
+    ASSERT_FALSE(file.ok());
   }
 } // namespace Arinc424TestSuite

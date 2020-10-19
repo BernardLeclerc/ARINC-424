@@ -50,7 +50,7 @@ namespace
 namespace Arinc424
 {
   File::File()
-      : status(0),
+      : status(-1),
         inputFormat(UnknownFormat),
         outputFormat(UnknownFormat),
         logStream(&clog),
@@ -106,6 +106,11 @@ namespace Arinc424
   bool File::ok() const
   {
     return status == 0;
+  }
+
+  bool File::empty() const
+  {
+    return status == -1;
   }
 
   bool File::load(istream &is)
