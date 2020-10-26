@@ -47,6 +47,12 @@ namespace Arinc424
         return inputFormat;
       }
 
+      /// \returns The output format that has been detected
+      Format getOutputFormat() const
+      {
+        return outputFormat;
+      }
+
       /// \todo Not defined yet
       bool setOutputFormat(Format format);
 
@@ -75,6 +81,14 @@ namespace Arinc424
       /// \brief Processes a standard record
       /// \returns true if the record is properly formatted; false otherwise.
       bool processStandardRecord(const std::string &record);
+
+      /// \brief Processes one P record
+      /// \returns true if the record is properly formatted; false otherwise.
+      bool processAirportSection(const std::string &record);
+
+      /// \brief Processes one PA record
+      /// \returns true if the record is properly formatted; false otherwise.
+      bool processAirportRecord(const std::string &record);
 
       /// \brief Processes a tailored record
       /// \returns true if the record is properly formatted; false otherwise.
@@ -135,14 +149,14 @@ namespace Arinc424
   };
 
   /// This extraction operator reads an ARINC-424 file from a standard input stream,
-  /// parses its content, and stores the resul into the specified Arinc424::File object.
+  /// parses its content, and stores the result into the specified Arinc424::File object.
   /// By default, the operator detects the input stream format by first trying a
   /// 132-character fixed length format, and - in case of failure - by assuming an XML
   /// input stream.
   std::istream &operator>>(std::istream &is, File &file);
 
   /// This insertion operator writes an Arinc424::File to a standard output stream.
-  /// The format is controlled by the state of the File object.
+  /// The output format is controlled by the state of the File object.
   std::ostream &operator<<(std::ostream &os, File &file);
 
   std::ostream &operator<<(std::ostream &os, File::LogCodes code);

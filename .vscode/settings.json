@@ -1,5 +1,8 @@
 {
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "cmake.configureOnOpen": true,
-  "C_Cpp.errorSquiggles": "Enabled"
+  "C_Cpp.errorSquiggles": "Enabled",
+  "files.associations": {
+    "string": "cpp"
+  }
 }

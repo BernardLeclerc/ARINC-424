@@ -11,6 +11,9 @@ using std::endl;
 #include <sstream>
 using std::istringstream;
 
+#include <cctype>
+using std::isdigit;
+
 namespace
 {
   /// \brief Converts a character string into an integer
@@ -23,27 +26,33 @@ namespace
     return is.fail() ? 0 : i;
   }
 
-  /// \todo implement isCycleDateValid
+  /// Section 5.32 defines the cycle date as 2 digits representing
+  /// the year followed by 2 digits for the cycle number.
   bool isCycleDateValid(const string &cycleDate)
   {
-    return false;
+    return cycleDate.length() == 4 &&
+           isdigit(cycleDate[0]) && isdigit(cycleDate[1]) && isdigit(cycleDate[2]) && isdigit(cycleDate[3]) &&
+           ((cycleDate[2] == '0' && cycleDate[3] != '0') || (cycleDate[2] == '1' && cycleDate[3] <= '4'));
   }
 
-  /// \todo implement isDateValid
+  /// Format is DD-MMM-YYYY
   bool isDateValid(const string &date)
   {
+    clog << "Function '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
     return false;
   }
 
   /// \todo implement isTimeValid
   bool isTimeValid(const string &time)
   {
+    clog << "Function '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
     return false;
   }
 
   /// \todo implement isBlank
   bool isBlank(const string &s)
   {
+    clog << "Function '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
     return false;
   }
 } // namespace
@@ -66,11 +75,13 @@ namespace Arinc424
   {
   }
 
-  // Extraction operator
+  /// \todo It makes sense to allow the operator to be used multiple times on the same File object.
+  /// \todo Multiple use of the extraction operator would permit the incremental build of the File object.
+  /// \todo is1 >> file; is2 >> file; ...
   istream &operator>>(istream &is, File &file)
   {
     // Start by assuming a fixed length
-    file.inputFormat = File::Format::FixedLengthFormat;
+    file.inputFormat = file.outputFormat = File::Format::FixedLengthFormat;
 
     // If the file loads successfully, we're good !!
     if (file.load(is)) return is;
@@ -80,11 +91,11 @@ namespace Arinc424
     if (!is.good()) return is;
 
     // ... and try an XML format
-    file.inputFormat = File::Format::XmlFormat;
+    file.inputFormat = file.outputFormat = File::Format::XmlFormat;
     if (file.load(is)) return is;
 
     // Apparently, the input stream has an unsupported format
-    file.inputFormat = File::Format::UnknownFormat;
+    file.inputFormat = file.outputFormat = File::Format::UnknownFormat;
     return is;
   }
 
@@ -108,6 +119,9 @@ namespace Arinc424
     return status == 0;
   }
 
+  /// \todo The semantic is not well-defined.
+  /// \todo The confusion comes from reading an empty stream; should the file be considered empty ?
+  /// \todo Should the meaning of empty be related to the input stream that was used to build the object ? Or should it be solely defined by the content of the File object ?
   bool File::empty() const
   {
     return status == -1;
@@ -125,7 +139,7 @@ namespace Arinc424
 
       case Format::UnknownFormat:
       default:
-        log(Error) << "Cannot load the Arinc424::File object from an unknown input stream" << endl;
+        log(Error) << "Cannot load an Arinc424::File object from an input stream when the input format is unknown." << endl;
         return false;
     }
   }
@@ -210,6 +224,72 @@ namespace Arinc424
   bool File::processStandardRecord(const string &record)
   {
     ++numStandardRecords;
+
+    const char &section = record[4];
+    switch (section)
+    {
+      case 'A':
+      case 'D':
+      case 'E':
+      case 'H':
+        log(Error) << "Section '" << section << "' not decoded yet." << endl;
+        break;
+
+      case 'P': return processAirportSection(record);
+
+      case 'R':
+      case 'T':
+      case 'U':
+        log(Error) << "Section '" << section << "' not decoded yet." << endl;
+        break;
+
+      default:
+        log(Error) << "Unrecognized Section Code '" << section << '\'' << endl;
+        break;
+     }
+
+    return false;
+  }
+
+  /// Airport records divided into several subsections
+  bool File::processAirportSection(const string &record)
+  {
+    const char &subsection = record[12];
+    switch (subsection)
+    {
+      case 'A': return processAirportRecord(record);
+      case 'B':
+      case 'C':
+      case 'D':
+      case 'E':
+      case 'F':
+      case 'G':
+      case 'H':
+      case 'I':
+      case 'K':
+      case 'L':
+      case 'M':
+      case 'N':
+      case 'P':
+      case 'Q':
+      case 'R':
+      case 'S':
+      case 'T':
+      case 'V':
+        log(Error) << "Airport Subsection '" << subsection << "' not decoded yet." << endl;
+        break;
+
+      default:
+        log(Error) << "Unrecognized Subsection Code '" << subsection << '\'' << endl;
+    }
+
+    return false;
+  }
+
+  /// PA records
+  bool File::processAirportRecord(const string &record)
+  {
+    log(Error) << "Method '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
     return false;
   }
 
@@ -217,7 +297,8 @@ namespace Arinc424
   bool File::processTailoredRecord(const string &record)
   {
     ++numTailoredRecords;
-    return false;
+    log(Error) << "Method '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
+    return true;
   }
 
   bool File::processHeaderRecord(const string &record)
@@ -256,46 +337,85 @@ namespace Arinc424
   {
     bool valid = true;
 
+    // Field #3: File Name
     header.filename = record.substr(5, 15);
+
+    // Field #4: Version Number
     header.versionNumber = parseInt(record.substr(20, 3));
     valid &= header.versionNumber > 0 && header.versionNumber < 1000;
+
+    // Field #5: Production/Test Flag
     header.isProduction = record[23] == 'P';
-    valid &= !header.isProduction && record[23] == 'T';
+    valid &= record[23] == 'P' || record[23] == 'T';
+
+    // Field #6: Record Length
     header.recordLength = parseInt(record.substr(24, 4));
     valid &= header.recordLength == 132;
+
+    // Field #7: Record Count
     header.recordCount = parseInt(record.substr(28, 7));
     valid &= header.recordCount > 0 && header.recordCount < 10000000;
+
+    // Field #8: Cycle Date
     header.cycleDate = record.substr(35, 4);
     valid &= isCycleDateValid(header.cycleDate);
+
+    // Field #9: Blank (spacing)
     valid &= record[39] == ' ';
+
+    // Field #10: Creation Date
     header.creationDate = record.substr(41, 11);
     valid &= isDateValid(header.creationDate);
+
+    // Field #11: Creation Time
     header.creationTime = record.substr(52, 8);
     valid &= isTimeValid(header.creationTime);
+
+    // Field #12: Blank (spacing)
     valid &= record[60] == ' ';
+
+    // Field #13: Data Supplier Ident
     header.dataSupplierIdent = record.substr(61,16);
     valid &= !isBlank(header.dataSupplierIdent);
+
+    // Field #14: Target Customer Ident (optional)
     header.targetCustomerIdent = record.substr(77, 16);
+
+    // Field #15: Database Part Number (optional)
     header.databasePartNumber = record.substr(93, 20);
+
+    // Field #16: Reserved (blank)
     valid &= isBlank(record.substr(113, 11));
+
+    // Field #17: File CRC
     header.fileCrc = parseInt(record.substr(124, 8));
     valid &= header.fileCrc > 0 && header.fileCrc < 100000000;
 
     return valid;
   }
 
-  /// \todo implement processHeader02
   bool File::processHeader02(const std::string &record)
   {
     bool valid = true;
 
+    // Field #3: Effective Date (optional)
     header.effectiveDate = record.substr(5, 11);
     valid &= isDateValid(header.effectiveDate) || isBlank(header.effectiveDate);
+
+    // Field #4: Expiration Date (optional)
     header.expirationDate = record.substr(16, 11);
     valid &= isDateValid(header.expirationDate) || isBlank(header.expirationDate);
+
+    // Field #5: Blank (spacing)
     valid &= record[27] == ' ';
+
+    // Field #6: Supplier Text (optional)
     header.supplierTextField = record.substr(28, 30);
+
+    // Field #7: Descriptive Text (optional)
     header.descriptiveText = record.substr(58, 30);
+
+    // Field #8: Reserved (blank)
     valid &= isBlank(record.substr(88, 44));
 
     return valid;
