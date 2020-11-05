@@ -1,0 +1,67 @@
+#pragma once
+
+#include "../Types/DataTypes.h"
+
+#include <list>
+
+namespace Arinc424
+{
+  namespace Record
+  {
+    class SupplementalData;
+
+    class A424Base
+    {
+      public:
+        A424Base();
+        virtual ~A424Base();
+
+        SupplementalData *getSupplementalData();
+        void setSupplementalData(SupplementalData *pSupplementalData);
+
+      private:
+        SupplementalData *pSupplementalData;
+    };
+
+    class A424ObjectWithId : public A424Base
+    {
+      public:
+        A424ObjectWithId();
+        virtual ~A424ObjectWithId();
+
+      private:
+        Type::CoreIdentifier identifier;
+    };
+
+    class A424Record : public A424Base
+    {
+      public:
+        A424Record();
+        virtual ~A424Record();
+
+      private:
+        Type::CustAreaCode custAreaCode;
+        Type::CycleDate cycleDate;
+        std::list<Type::NotesText> notes;
+        Enum::RecordType recordType;
+    };
+
+    class A424Point : public A424Record
+    {
+      public:
+        A424Point();
+        virtual ~A424Point();
+
+      private:
+        Enum::DatumCode datumCode;
+        Type::IcaoCode icaoCode;
+        Type::CodeIdentifier identifier;
+        Type::Location location;
+        Type::MagneticVariation magneticVariation;
+        Type::Name name;
+        xs::IDREF uirRef;
+        xs::IDREF firRef;
+        xs::ID referenceID;
+    };
+  } // namespace Record
+} // namespace Arinc424

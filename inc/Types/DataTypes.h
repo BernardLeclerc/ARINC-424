@@ -1,9 +1,27 @@
 #pragma once
 
+#include "Enumerations.h"
+
+#include <string>
+
 namespace Arinc424
 {
   namespace Type
   {
+    typedef std::string CoreIdentifier;
+    typedef std::string CycleDate;
+    typedef std::string CustomerCode;
+    typedef std::string NotesText;
+    typedef std::string PointReference;
+
+    typedef unsigned int LongestRunway;
+
+    union CustAreaCode
+    {
+      Enum::AreaCode areaCode;
+      CustomerCode customerCode;
+    };
+
     typedef int AltitudeValue;
 
     class Altitude
