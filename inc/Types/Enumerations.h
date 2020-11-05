@@ -14,7 +14,7 @@ namespace Arinc424
       public:
     };
 
-    enum ControlledASIndicator
+    enum class ControlledASIndicator
     {
       Undefined,
       WithinOrBelowClassC,
@@ -24,12 +24,12 @@ namespace Arinc424
       WithinOrBelowClassB
     };
 
-    enum LongestRunwaySurfaceCode
+    enum class LongestRunwaySurfaceCode
     {
       Undefined,
       Hard,
       Soft,
       Water
-    }
+    };
   }
 } // namespace Arinc424

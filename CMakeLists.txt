@@ -17,10 +17,11 @@ add_library(
   inc/Reader.h src/Reader.cpp
   inc/Header.h src/Header.cpp
 
-  inc/Records/Airport.h src/Records/Airport.cpp
-  inc/Records/Base.h src/Records/Base.cpp
-
+  inc/Types/Enumerations.h
   inc/Types/DataTypes.h src/Types/DataTypes.cpp
+
+  inc/Records/BasicClasses.h
+  inc/Records/Port.h
 )
 
 target_include_directories(

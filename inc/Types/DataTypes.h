@@ -22,6 +22,7 @@ namespace Arinc424
       CustomerCode customerCode;
     };
 
+    /// \todo Consider defining a class to implement the restriction in the range of valid integers: from -2000 to 99999
     typedef int AltitudeValue;
 
     class Altitude
