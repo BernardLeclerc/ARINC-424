@@ -22,7 +22,9 @@ GoogleTest:
 
 `Arinc424::Record` contains one class per ARINC-424 record defined in chapter 4 of the Specification.
 
-`Arinc424::Type` contains ARINC-424 data types to build ARINC-424 records.
+`Arinc424::Type` contains the ARINC-424 data types of chapter 5.
+
+`Arinc424::Enum` contains all ARINC-424 enumerations found in chapter 5.
 
 # Design Principles
 Supplement 22 to ARINC-424 introduces an XML format formalized by several XSD schemas; the files and types defining these schemas form the basis of this C++ library. Each `.xsd` file correspond to a pair of `.h/.cpp` files. And most - if not all - complex types defined in these schemas have a matching C++ class.
