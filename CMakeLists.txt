@@ -13,14 +13,15 @@ add_library(
 
   inc/Arinc424.h
 
-  inc/File.h src/File.cpp
-  inc/Reader.h src/Reader.cpp
+  inc/File.h   src/File.cpp
   inc/Header.h src/Header.cpp
+  inc/Reader.h src/Reader.cpp
 
+  inc/Types/DataTypes.h    src/Types/DataTypes.cpp
   inc/Types/Enumerations.h
-  inc/Types/DataTypes.h src/Types/DataTypes.cpp
 
   inc/Records/BasicClasses.h
+  inc/Records/Navaids.h
   inc/Records/Port.h
 )
 
@@ -47,11 +48,11 @@ target_link_libraries(
   pthread
   )
 
-  # The documentation is built with Doxygen
-  find_package(Doxygen)
-  set(DOXYGEN_OUTPUT_DIRECTORY ../doc)
-  doxygen_add_docs(
-    Documentation
-    inc;src
-    COMMENT "Running Doxygen to produce the documentation"
-    )
+# The documentation is built with Doxygen
+find_package(Doxygen)
+set(DOXYGEN_OUTPUT_DIRECTORY ../doc)
+doxygen_add_docs(
+  Documentation
+  inc;src
+  COMMENT "Running Doxygen to produce the documentation"
+  )
