@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Types/DataTypes.h"
+#include "../xs.h"
 
 #include <list>
 
@@ -55,7 +56,7 @@ namespace Arinc424
       private:
         Enum::DatumCode datumCode;
         Type::IcaoCode icaoCode;
-        Type::CodeIdentifier identifier;
+        Type::CoreIdentifier identifier;
         Type::Location location;
         Type::MagneticVariation magneticVariation;
         Type::Name name;
