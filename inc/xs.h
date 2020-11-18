@@ -6,10 +6,18 @@
 
 namespace xs
 {
-  /// 
+  typedef double decimal;
+
+  typedef std::string duration;
+
   typedef std::string ID;
 
-  /// 
   typedef std::string IDREF;
+
+  typedef std::string string;
+
+  typedef unsigned int unsignedInt;
+
+  typedef bool boolean;
 
 } // namespace xs

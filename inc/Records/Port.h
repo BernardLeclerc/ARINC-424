@@ -1,6 +1,9 @@
 #pragma once
 
 #include "BasicClasses.h"
+#include "Navaids.h"
+#include "SIDSTARApproach.h"
+
 #include "../Types/DataTypes.h"
 #include "../Types/Enumerations.h"
 
@@ -10,6 +13,18 @@ namespace Arinc424
 {
   namespace Record
   {
+    class TerminalProcedures
+    {
+      public:
+        TerminalProcedures();
+        ~TerminalProcedures();
+
+      private:
+        std::list<SID> sid;
+        std::list<STAR> star;
+        std::list<Approach> approach;
+    };
+
     class Port : public A424Point
     {
       public:
@@ -17,7 +32,7 @@ namespace Arinc424
         virtual ~Port();
 
       private:
-        Type::Elevation elevation;
+        Type::Elevation elevation; 
         Type::ATAIATADesignator ataIATADesignator;
         Type::DaylightIndicator daylightIndicator;
         Type::IFRCapability ifrCapability;
