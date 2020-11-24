@@ -21,8 +21,12 @@ add_library(
   inc/Types/Enumerations.h
 
   inc/Records/BasicClasses.h
+  inc/Records/Legs.h
   inc/Records/Navaids.h
+  inc/Records/PathPoint.h
   inc/Records/Port.h
+  inc/Records/Route.h
+  inc/Records/SIDSTARApproach.h
 )
 
 target_include_directories(

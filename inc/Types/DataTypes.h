@@ -4,8 +4,6 @@
 
 #include "../xs.h"
 
-#include <string>
-
 namespace Arinc424
 {
   namespace Type
@@ -54,7 +52,43 @@ namespace Arinc424
     };
 
     /// The “ATA/IATA” field contains the Airport/Heliport ATA/IATA designator code to which the data contained in the record relates.
-    typedef std::string ATAIATADesignator;
+    typedef xs::string ATAIATADesignator;
+
+    /// Identifies the approach types published on a given approach procedure which require Airport or Helicopter Operations SBAS path points.
+    /// Limited to 10 characters.
+    typedef xs::string ApproachTypeIdentifier;
+
+    /// The “GNSS Channel Number” field identifies the channel to be used for a given approach.
+    /// The “MLS Channel” field specifies the channel of the Azimuth, Elevationand Data transmissions for the MLS identified in the “MLS Identifier” field of the record.
+    /// Restricted to exactly 5 digits.
+    typedef xs::unsignedInt Channel;
+
+    /// Restricted to the range 0 to 360 degrees
+    typedef xs::decimal CompassValue;
+
+    /// Restricted to 4 digits, one fraction digit.
+    typedef CompassValue BearingValue;
+
+    /// “Outbound Magnetic Course” is the published outbound magnetic course from the waypoint identified in the record’s “Fix Ident” field.
+    /// In addition, this field is used for Course/Heading/Radials on SID/STAR Approach Records through requirements of the Path Terminator and coding rules contained in Attachment 5 of this specification.
+    typedef CompassValue CourseValue;
+
+    /// “Outbound Magnetic Course” is the published outbound magnetic course from the waypoint identified in the record’s “Fix Ident” field.
+    /// In addition, this field is used for Course/Heading/Radials on SID/STAR Approach Records through requirements of the Path Terminator and coding rules contained in Attachment 5 of this specification.
+    class Course
+    {
+      public:
+        Course();
+        ~Course();
+
+      private:
+        Type::CourseValue courseValue;
+        xs::boolean isTrue;
+    };
+
+    /// The “Course Width At Threshold” field defines the width of the lateral course at the Landing Threshold Point (LTP) or Fictitious Helipoint (or helipoint).
+    /// This width, in conjunction with the location of the Flight Path Alignment Point (FPAP) defines the sensitivity of the lateral deviations throughout the approach.
+    typedef xs::decimal CourseWidthAtThreshold;
 
     ///Restricted to 6 digits and 3 fraction digits
     typedef xs::decimal DistanceNMThousanths;
@@ -67,12 +101,12 @@ namespace Arinc424
 
     /// The “Core Identifier” field contains the character-name-code, or other series of characters, with which the object is identified.
     /// This includes Waypoint Identifiers, VHF NAVAID Identifiers, NDB NAVAID identifier, Airport Identifiers, Runway Identifiers, and other objects.
-    typedef std::string CoreIdentifier;
+    typedef xs::string CoreIdentifier;
 
     /// The “Customer Area Code” field permits the categorization of standard records by geographical area and of tailored records by the airlines for whom they are provided in the master file.
     /// Several record types do not adhere to the established geographical boundaries.
     /// There is no “AREA” in such records.
-    typedef std::string CustomerCode;
+    typedef xs::string CustomerCode;
 
     /// The “Customer Area Code” field permits the categorization of standard records by geographical area
     /// and of tailored records by the airlines for whom they are provided in the master file.
@@ -96,10 +130,19 @@ namespace Arinc424
     /// The last two digits contain the numeric identity of the 28-day data update cycle during which the change occurred.
     /// Each calendar year contains 13 such cycles; however, on rare occasions 14 cycles will be encountered.
     /// Note: This field does not indicate changes on elements/attributes of type ID or IDREF.
-    typedef std::string CycleDate;
+    typedef xs::string CycleDate;
 
     /// The “Daylight” Time Indicator” field is used to indicate if the airport observes Daylight or Summer time when such time changes are in effect for the country or state the airport resides in.
     typedef bool DaylightIndicator;
+
+    /// Restricted to exactly 4 digits.
+    typedef xs::unsignedInt DistanceFeet;
+
+    /// Restricted to exactly 5 digits.
+    typedef xs::unsignedInt DistanceFeetFiveDigits;
+
+    /// Restricted to 3 digits and 1 decimal.
+    typedef xs::decimal DistanceMeters;
 
     /// Restricted to 4 digits and 1 fraction digit.
     typedef xs::decimal DistanceNM;
@@ -107,6 +150,13 @@ namespace Arinc424
     /// Elevation of the respective feature.
     /// Restricted to the range -1500 to 20000
     typedef int Elevation;
+
+    /// The “Ellipsoidal Height” field is the height of a surveyed point in reference to the WGS-84 ellipsoid.
+    typedef xs::decimal EllipsoidHeight;
+
+    /// The “Final Approach Segment Data CRC Remainder” field is an eight (8) character hexadecimal representation of the 32-bit CRC value provided by the source for the information contained in the aeronautical data fields being monitored for integrity.
+    /// The value is calculated by a specific mathematical algorithm, which is both machine and man processible.
+    typedef xs::string FinalApproachSegmentDataCRCRemainder;
 
     /// This field specifies frequency and unit of measure of the frequency information.
     class Frequency
@@ -120,11 +170,39 @@ namespace Arinc424
         float frequencyValue;
     };
 
+    /// The “Glide Path Angle” field is an angle, expressed in degrees, tenths and hundredths of degrees, measured at the Flight Path Control Point (FPCP) of those approach procedures that require the coding of a Airport or Helicopter Operations SBAS Path Point record or GBAS Path Point Record. It establishes the intended descent gradient for the final approach flight path. For an illustration of the GPA and related points.
+    typedef xs::decimal GlidePathAngle;
+
+    /// The “High Precision Latitude” field contains the latitude of the navigation feature identified in the record.
+    /// When used on Airport Path Point Records, one navigation feature is the LTP/FTP, the other is the FPAP.
+    /// When used on Helicopter Operations Path Point Records, one navigation feature is the Fictitious Helipoint (or Helipoint), the other is the FPAP.
+    typedef xs::string HighPrecisionLatitude;
+
+    /// The “High Precision Longitude” field contains the longitude of the navigation feature identified in the record.
+    /// When used on Airport Path Point Records, one navigation feature is the LTP/FTP, the other is the FPAP.
+    /// When used on Helicopter Operations Path Point Records, one navigation feature is the Fictitious Helipoint (or Helipoint), the other is the FPAP.
+    typedef xs::string HighPrecisionLongitude;
+
+    /// High Precision Location
+    class HighPrecisionLocation
+    {
+      public:
+        HighPrecisionLocation();
+        ~HighPrecisionLocation();
+
+      private:
+        Type::HighPrecisionLatitude highPrecisionLatitude;
+        Type::HighPrecisionLongitude highPrecisionLongitude;
+    };
+
+    /// The Horizontal Alert Limit (HAL) is the radius of a circle in the horizontal plane (the local plane tangent to the WGS-84 ellipsoid), with its center being at the true position, which describes the region which is required to contain the indicated horizontal position with the required probability for a particular navigation mode assuming the probability of a GPS satellite integrity failure being included in the position solution is less than or equal to 10-4 per hour.
+    typedef DistanceMeters HorizontalAlertLimit;
+
     /// This element provides the 2 character code to identify a state
-    typedef std::string IcaoCode;
+    typedef xs::string IcaoCode;
 
     /// The “IFR Capability” field indicates if the Airport/Heliport has any published Instrument Approach Procedures.
-    typedef bool IFRCapability;
+    typedef xs::boolean IFRCapability;
 
     /// This is an abstract class that is the parent class for degrees.
     typedef int LatLongDegree;
@@ -135,23 +213,37 @@ namespace Arinc424
     /// Contains degrees of a coordinate as an integer from 0 to 180.
     typedef LatLongDegree LongDegree;
 
+    /// The “Length Offset” field is the distance from the stop end of the runway (SER) to the FPAP.
+    /// This distance defines the location where lateral sensitivity changes to the missed approach sensitivity.
+    /// If the FPAP is located at the designated center of the opposite runway end, the distance is zero.
+    /// Additionally, if the procedure is a Point in Space procedure and there is no runway, the value is set to 0000 (all zeros).
+    typedef DistanceFeet LengthOffset;
+
     /// Leg distance element used on procedure and airway legs, and terminal procedure flight planning records.
     typedef DistanceNM LegDistance;
 
     ///
     typedef xs::string LegInboundIndicator;
 
-    typedef unsigned int LongestRunway;
+    typedef xs::unsignedInt LongestRunway;
 
     /// The “Name” field defines the name commonly applied to the navigation entity defined in the record.
     /// The field is restricted to a maximum of 50 characters.
-    typedef std::string Name;
+    typedef xs::string Name;
 
     ///
-    typedef std::string NotesText;
+    typedef xs::string NotesText;
 
-    ///
-    typedef std::string PointReference;
+    /// The “Orthometric Height” field is the height of a surveyed point in reference to Mean Sea Level (MSL).
+    /// Restricted to the range -9999 to +9999.
+    typedef xs::decimal OrthometricHeight;
+
+    /// On procedures to runways or helipads, the Path Point TCH is the height above the runway threshold (LTP) or the helicopter alighting point. On procedures which are Point in Space, the height of the fictitious helipoint (or helipoint) above the height of the heliport. It is the same as the TCH defined in Section 5.67, but has greater resolution due to the required precision.  The value may be expressed in feet to a resolution of tenths of feet, or meters to a resolution of hundredths of meters. Whether the value is in feet or meters can be determined from the TCH Units Indicator.
+    /// Restricted to 6 digits and 2 decimals
+    typedef xs::decimal PathPointTCH;
+
+    /// This element provides a way to reference any child element of A424Point.
+    typedef xs::string PointReference;
 
     /// Contains minutes of a coordinate as an integer from 0 to 60.
     typedef int Minute;
@@ -216,7 +308,9 @@ namespace Arinc424
     /// The “Magnetic Variation” field specifies the angular difference between True North and Magnetic North at the location defined in the record.
     /// “Dynamic Magnetic Variation” is a computer model derived value and takes location and date into consideration.
     /// For the “Station Declination” used in some record types, refer to Section 5.66.
-    typedef double MagneticVariationValue;
+    /// Limited to the range 0 to 180 degrees.
+    /// Limited to 4 digits and 1 decimal.
+    typedef xs::decimal MagneticVariationValue;
 
     /// The “Magnetic Variation” field specifies the angular difference between True North and Magnetic North at the location defined in the record.
     /// “Dynamic Magnetic Variation” is a computer model derived value and takes location and date into consideration.
@@ -233,6 +327,9 @@ namespace Arinc424
     };
 
     ///
+    typedef unsigned char MultipleIndicator;
+
+    ///
     class NdbNavaidClass
     {
       public:
@@ -240,12 +337,12 @@ namespace Arinc424
         ~NdbNavaidClass();
 
       private:
-        bool isBFORequired; ///< BFO Operation.  Use of Beat Frequency Oscillator type of equipment is required to received an aural identification signal.
+        xs::boolean isBFORequired; ///< BFO Operation.  Use of Beat Frequency Oscillator type of equipment is required to received an aural identification signal.
         Enum::NdbNavaidCoverage ndbNavaidCoverage;
         Enum::NdbNavaidIfMarkerInfo ndbNavaidIfMarker;
         Enum::NdbNavaidType ndbNavaidType;
         Enum::NavaidWeatherInfo ndbNavaidWeatherInfo;
-        bool isNoVoice;
+        xs::boolean isNoVoice;
     };
 
     /// This type provides the aircraft category(s) for which the procedure or portion of a procedure (transition) was designed.
@@ -310,11 +407,83 @@ namespace Arinc424
         xs::boolean isAtcCompulsoryReportingPoint;
     };
 
+    /// The “Reference Path Data Selector” field enables the automatic tuning of a procedure by Ground Based Augmentation Systems (GBAS) avionics.
+    /// This data is not used for SBAS operations.
+    /// Limited to exactly 2 digits.
+    typedef xs::unsignedInt ReferencePathDataSelector;
+
+    /// The Reference Path Identifier field represents the three or four alphanumeric characters used to uniquely designate the reference path.
+    /// The Reference Path Identifier is synonymous with the approach ID located beneath the Channel Number on Instrument Approach Plates and is unique only for a given airport.
+    typedef xs::string ReferencePathIdentifier;
+
     /// The Facility Characteristics field identifies the characteristics of the NAVAID facility.
     typedef xs::unsignedInt RepetitionRate;
 
+    /// Required Navigation Performance (RNP) is a statement of the Navigation Performance necessary for operation within a defined airspace in accordance with ICAO Annex 15 and/or State published rules.  e.g., .15, 4, 1, .3
+    /// Restricted to 9 digits
+    typedef xs::decimal RequiredNavigationPerformance;
+
     /// “RHO” is defined as the geodesic distance in nautical miles to the waypoint identified in the record’s “Fix Ident” field from the NAVAID in the “Recommended NAVAID” field.
     typedef DistanceNM Rho;
+
+    /// 
+    class RNPLOS
+    {
+      public:
+        RNPLOS();
+        ~RNPLOS();
+
+      private:
+        xs::decimal rnp;
+        Enum::RnpLOSAuthorized rnpLOSAuthorized;
+    };
+
+    /// The “Route Indicator” field is a single alpha character used to differentiate between multiple final approach segments to the same runway or helipad contained in the Final Approach Coding.
+    typedef unsigned char RouteIndicator;
+
+    /// This element provides boolean expressions describing qualifications of the route.
+    /// The qualifications in this element are common to different types of routes.
+    class RouteQualifications
+    {
+      public:
+        RouteQualifications();
+        ~RouteQualifications();
+
+      private:
+        xs::boolean isDmeReq;
+        xs::boolean isGnssReq;
+        xs::boolean isRadarReq;
+        xs::boolean isFmsReq;
+        xs::boolean isConventional;
+    };
+
+    /// The “RunwayNumber” field identifies the runways described in runway records and runways served by the ILS/MLS described in ILS/MLS records. The runway Number is only part of the Runway Identifier.
+    /// Limited to the range of 1 to 36.
+    typedef xs::unsignedInt RunwayNumber;
+
+    /// The “Runway Identifier” field identifies the runways described in runway records and runways served by the ILS/MLS described in ILS/MLS records.
+    class RunwayIdentifier
+    {
+      public:
+        RunwayIdentifier();
+        ~RunwayIdentifier();
+
+      private:
+        Enum::RunwayLeftRightCenterType runwayLeftRightCenterType;
+        Type::RunwayNumber runwayNumber;
+    };
+
+    /// This XML element is designed as an abstraction for Runway Identifier or Pad Identifier, this is done by using the XML attribute "choice", so that only one of the elements can be present in the XML file.
+    class RunwayOrPadIdentifier
+    {
+      public:
+        RunwayOrPadIdentifier();
+        ~RunwayOrPadIdentifier();
+
+      private:
+        CoreIdentifier padIdentifier;
+        RunwayIdentifier runwayIdentifier;
+    };
 
     /// For Route Type Records - A route of flight is defined by a series of records taken in order.
     /// The “Sequence Number” field defines the location of the record in the sequence defining the route of flight identified in the route identifier field.
@@ -326,6 +495,13 @@ namespace Arinc424
     /// The Speed Limit field defines a speed, expressed in Knots, Indicated (K.I.A.S.), for a fix in a terminal procedure or for an airport or heliport terminal environment.
     /// Restricted to less than 1000.
     typedef unsigned int SpeedLimit;
+
+    /// “Theta” is defined as the magnetic bearing to the waypoint identified in the record’s “FIX Ident” field from the Navaid in the “Recommended Navaid” field.
+    typedef BearingValue Theta;
+
+    /// The “Threshold Crossing Height” specifies the height above the landing threshold on a normal glide path.
+    /// Limited to 3 digits.
+    typedef xs::unsignedInt ThresholdCrossingHeight;
 
     /// The standard time zone system is based on the division of world into 24 zones, each of 15 degrees longitude.
     /// The “zero” time zone is entered at Greenwich meridian with longitudes 7 degrees, 30 minutes West and 7 degrees, 30 minutes east, and there is no difference in the standard time of this time zone and Greenwich Mean Time.
@@ -347,6 +523,15 @@ namespace Arinc424
     /// Aircraft descending through the transition layer will use altimeters set to local station pressure, while departing aircraft climbing through the layer will be using standard altimeter setting (QNE) of 29.92 inches of mercury, 1013.2 millibars or 1013.2 hectopascals.
     /// Restricted to a total of 5 digits.
     typedef AltitudeValue TransitionAltitude;
+
+    typedef xs::string Vectoring;
+
+    /// The Vertical Alert Limit (VAL) is half the length of a segment on the vertical axis (perpendicular to the horizontal plane of WGS-84 ellipsoid), with its center being at the true position, which describes the region which is required to contain the indicated vertical position with a probability of 1-10-7 per approach, assuming the probability of a GPS satellite integrity failure being included in the position solution is less than or equal to 10-4 per hour.
+    typedef xs::decimal VerticalAlertLimit;
+
+    /// Vertical Scale Factor (VSF) is used to set the vertical deviation scale.
+    /// Restricted to 3 digits
+    typedef xs::unsignedInt VerticalScaleFactor;
 
   } // namespace Type
 } // namespace Arinc424

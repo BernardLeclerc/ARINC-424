@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../xs.h"
+
 namespace Arinc424
 {
   namespace Enum
@@ -16,21 +18,116 @@ namespace Arinc424
       I ///< Glide Slope Intercept Altitude specified in second "Altitude" field and "at" altitude specified in first "Altitude" field on the FACF Waypoint in Precision Approach Coding with electronic Glide Slope
     };
 
-    class AreaCode
+    /// This field provides information on the ICAO PBN Navigation Specification appliable to this approach
+    enum class ApproachPbnNavSpec
     {
-      public:
+      Rnav1,
+      Rnp1,
+      RnpAr,
+      AdvRnp,
+      Rnp0_3,
+      PbnUnspecified,
+      RnpApch
     };
 
-    /// 
+    /// The “Approach Performance Designator” field is used to indicate the type or category of approach.
+    enum class ApproachPerformanceDesignator
+    {
+      Zero,
+      One,
+      Two,
+      Three,
+      Four,
+      Five,
+      Six,
+      Seven
+    };
+
+    /// Route Qualifier 1 for Airport Approach (PF) and Heliport (HF) Records – Route Type
+    enum class ApproachQualifier1
+    {
+      RnavVisual,
+      DmeRequired,
+      GpsRequiredDmeDmeNotAuthorized,
+      RnpAr,
+      AdvancedRnp,
+      Gbas,
+      DmeNotRequired,
+      GnssRequired,
+      GnssorDmeDmeRequired,
+      DmeDmeRequired,
+      RnavSensorNotSpecified,
+      VorDmeRnav,
+      RnavRequiresFasDataBlock
+    };
+
+    /// Route Type Qualifier 2 for Airport Approach (PF) and Heliport (HF) Records – Route Type
+    enum class ApproachQualifier2
+    {
+      PrimaryMissedApproach,
+      SecondaryMissedApproach,
+      EngineOutMissedApproach,
+      CircleToLandMinimums,
+      HelicopterStraightInMinimums,
+      HelicopterCircleToLandMinimums,
+      HelicopterLandingMinimums,
+      StraightInMinimums,
+      VmcMinimums
+    };
+
+    /// The "Route Type" field defines the type of Airport Approach (PF) and Heliport Approach (HF) Records.
+    enum class ApproachRouteType
+    {
+      LocBackcourse,
+      VorDme,
+      Fms,
+      Igs,
+      Rnp,
+      Ils,
+      Gls,
+      LocOnly,
+      Mls,
+      Ndb,
+      Gps,
+      NdbDme,
+      Rnav,
+      VorUsingVorDmeOrVortac,
+      Tacan,
+      Sdf,
+      Vor,
+      Lda
+    };
+
+    /// The “Customer Area Code” field permits the categorization of standard records by geographical area and of tailored records by the airlines for whom they are provided in the master file.
+    /// Several record types do not adhere to the established geographical boundaries.
+    /// There is no “AREA” in such records.
+    enum class AreaCode
+    {
+      AFR, ///< Africa
+      CAN, ///< Canada
+      EEU, ///< Eastern Europe and Asia
+      EUR, ///< Europe
+      LAM, ///< Latin America
+      MES, ///< Middle East
+      PAC, ///< Pacific
+      SAM, ///< South America
+      SPA, ///< South Pacific
+      USA  ///< United States
+    };
+
+    /// The ATC Indicator field will be used to indicate that the altitudes shown in the altitude fields can be modified by ATC or the altitude will be assigned by ATC.
     enum class ATCIndicator
     {
       ModifiedOrAssigned, ///< Altitude can be modified or assigned by ATC.
-      AssignedIfNotProvided ///< official government source states that the altitude will be assigned by ATC or if no altitude is supplied
+      AssignedIfNotProvided ///< Official government source states that the altitude will be assigned by ATC or if no altitude is supplied
     };
 
-    class RecordType
+    /// The “Record Type” field content indicates whether the record data are “standard,” i.e., suitable for universal application, or “tailored,” i.e. included on the master file for a single user’s specific purpose.
+    /// Record type is set to tailored if any extension points are included in the record or if any ARINC 424 XML schemas are modified.
+    enum class RecordType
     {
-      public:
+      Standard,
+      Tailored
     };
 
     enum class ControlledASIndicator
@@ -202,6 +299,45 @@ namespace Arinc424
       kiloHertz
     };
 
+    /// The “Operation Type” field indicates whether the operation is an approach procedure, an advanced operation or other operational to be defined later.
+    enum class GBASOperationType
+    {
+      Zero,     ///< Straight-in approach path
+      One,      ///< Terminal Area Path definition (not for FAS Datablock)
+      Two,      ///< Missed Approach (not for FAS Datablock)
+      Three,    ///< Spare
+      Four,     ///< Spare
+      Five,     ///< Spare
+      Six,      ///< Spare
+      Seven,    ///< Spare
+      Eight,    ///< Spare
+      Nine,     ///< Spare
+      Ten,      ///< Spare
+      Eleven,   ///< Spare
+      Twelve,   ///< Spare
+      Thirteen, ///< Spare
+      Fourteen, ///< Spare
+      Fifteen   ///< Spare
+    };
+
+    /// The GNSS/FMS Indicator field provides an indication of whether or not the responsible government agency has authorized the overlay of a conventional, ground based approach procedure with the use of a sensor capable of processing GNSS data or if the procedure may be flown with FMS as the primary navigation equipment. The field is also used to indicate when and RNAV procedure has been authorized for GNSS-based vertical navigation.
+    enum class GNSSFMSIndicator
+    {
+      GnssFmsOverlayAuthNotPublished,
+      GnssOverlayAuthNavaidOperatingAndMonitored,
+      GnssOverlayAuthNoMonitorNavaidAuth,
+      GnssOverlayTitleIncludesGpsOrGnss,
+      FmsOverlayAuthorized,
+      SbasVerticalAuthorized,
+      SbasVerticalNotAuthorized,
+      SbasVerticalNotPublished,
+      StandAloneGNSS,
+      SbasVerticalNA,
+      OverlayAuthNotPublished,
+      PbnRnpGps,
+      LocOnlyIls
+    };
+
     /// This data type indicates if the latitude is north or south.
     enum class NorthSouth
     {
@@ -221,6 +357,23 @@ namespace Arinc424
     {
       Inbound,
       Outbound
+    };
+
+    /// The “Level of Service Authorized” field defines whether the Level of Service designated in an associated field (Section 5.275) is authorized or not authorized for a procedure.
+    enum class LevelOfServiceAuthorised
+    {
+      Authorized,
+      NotAuthorized
+    };
+
+    /// The “Level of Service Name” field identifies the official procedure level of service based on published procedure operating minimums information for Approach Procedures authorized for SBAS and/or RNP.
+    enum class LevelOfServiceName
+    {
+      LPV,
+      LPV200,
+      LP,
+      LNAV,
+      LNAV_VNAV
     };
 
     /// The field has multiple definitions.
@@ -335,6 +488,13 @@ namespace Arinc424
       PbnUnspecified
     };
 
+    /// 
+    enum class RnpLOSAuthorized
+    {
+      Authorized,
+      NotAuthorized
+    };
+
     /// This field provides information on the ICAO PBN Navigation Specification applicable to this procedure.
     enum class RnpPbnNavSpec
     {
@@ -344,6 +504,76 @@ namespace Arinc424
       AdvRnp,
       Rnp0_3,
       PbnUnspecified
+    };
+
+    /// Runway Left/Right/Centre Indicator
+    enum class RunwayLeftRightCenterType
+    {
+      Left,
+      Right,
+      Center
+    };
+
+    /// The “Operation Type” field indicates whether the operation is an approach procedure, an advanced operation or other operational to be defined later.
+    enum class SBASOperationType
+    {
+      Zero,     ///< Straight-in or point-in-space approach procedure
+      One,      ///< Reserved for future definition
+      Two,      ///< Reserved for future definition
+      Three,    ///< Spare
+      Four,     ///< Spare
+      Five,     ///< Spare
+      Six,      ///< Spare
+      Seven,    ///< Spare
+      Eight,    ///< Spare
+      Nine,     ///< Spare
+      Ten,      ///< Spare
+      Eleven,   ///< Spare
+      Twelve,   ///< Spare
+      Thirteen, ///< Spare
+      Fourteen, ///< Spare
+      Fifteen   ///< Spare
+    };
+
+    /// The “SBAS Service Provider Identifier” field is used to associate the approach procedure to a particular satellite based approach system service provider.
+    enum class SBASServiceProviderIdentifier
+    {
+      Zero,
+      One,
+      Two,
+      Fourteen,
+      Fifteen
+    };
+
+    /// The "Speed Limit Description" field will designate whether the speed limit coded at a fix in a terminal procedure description is a mandatory, minimum or maximum speed.
+    /// For Maximum speeds: The SID Procedure Records and Missed Approach Procedures speed limit will apply to all legs up to and including the termination of the leg on which the speed is coded from the beginning of the procedure or a previous speed limit.
+    /// If a different speed is coded on a subsequent leg, the limit will be applied for that leg and from that leg backwards to the previous terminator which contained a speed limit.
+    /// The STAR and Approach Procedure Record speed limit will be applied forward to the end of the arrival (excluding the missed approach procedure) or until superseded by another speed limit.
+    /// For Minimum speeds: The SID Procedure Records and Missed Approach Procedures speed limit will be applied forward to the end of the SID or Missed Approach Procedure or until superseded by another speed limit.
+    /// The STAR and Approach Procedure Record speed limit will apply to all legs up to and including the termination of the leg on which the speed is coded from the beginning of the procedure or a previous speed limit.
+    /// If a different speed is coded on a subsequent leg, the limit will be applied for that leg and from that leg backwards to the previous terminator which contained a speed limit.
+    /// For Mandatory speeds: The speed requirement shall be met at the fix. The speed will not be applied to previous legs or applied forward to the next legs of the procedure record.
+    enum class SpeedLimitDescription
+    {
+      Mandatory, ///< Mandatory Speed, Cross Fix AT speed specified in Speed Limit
+      Minimum,
+      Maximum
+    };
+
+    /// The TCH Units Indicator field is used in Path Point Records to define the units, Feet or Meters for the Path Point TCH.
+    enum class TCHUnitsIndicator
+    {
+      Feet,
+      Meters
+    };
+
+    /// The “Turn Direction” field specifies the direction in which Terminal Procedure turns are to be made.
+    /// It is also used to indication direction on course reversals, see Attachment 5 Path and Termination.
+    enum class TurnDirection
+    {
+      Left,
+      Right,
+      Either
     };
 
     /// The Facility Characteristics field identifies the characteristics of the NAVAID facility.
