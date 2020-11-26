@@ -1,8 +1,11 @@
 #pragma once
 
 #include "BasicClasses.h"
+#include "Communication.h"
 #include "Navaids.h"
 #include "SIDSTARApproach.h"
+#include "TAA.h"
+#include "Waypoint.h"
 
 #include "../Types/DataTypes.h"
 #include "../Types/Enumerations.h"
@@ -43,18 +46,18 @@ namespace Arinc424
         Type::Altitude speedLimitAltitude;
         Type::TimeZone timeZone;
         Type::TransitionAltitude transitionLevel;
-        TerminalNDB terminalNDB;
+        std::list<TerminalNDB> terminalNDB;
         TerminalProcedures terminalProcedures;
-        TerminalWaypoint terminalWaypoint;
-        TAA taa;
-        PortCommunication portCommunication;
-        Helipad helipad;
-        AirportHeliportLocalizerMarker localizerMarker;
-        LocalizerGlideslope localizerGlideslope;
-        GLS gls;
-        MLS mls;
-        MSA msa;
-        FlightPlanningRecords flightPlanningArrivalDepartureRecords;
+        std::list<TerminalWaypoint> terminalWaypoint;
+        std::list<TAA> taa;
+        std::list<PortCommunication> portCommunication;
+        std::list<Helipad> helipad;
+        std::list<AirportHeliportLocalizerMarker> localizerMarker;
+        std::list<LocalizerGlideslope> localizerGlideslope;
+        std::list<GLS> gls;
+        std::list<MLS> mls;
+        std::list<MSA> msa;
+        std::list<FlightPlanningRecords> flightPlanningArrivalDepartureRecords;
         Type::CategoryDistance categoryDistance;
         Type::MaxHelicopterWeight maxHelicopterWeight;
     };

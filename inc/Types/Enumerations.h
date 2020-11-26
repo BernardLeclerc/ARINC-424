@@ -292,6 +292,24 @@ namespace Arinc424
       ZAN  /// Zanderij
     };
 
+    /// Fix Type Enums for the field Name Format Indicator
+    enum class FixType
+    {
+      Abeam,
+      BearingDistance,
+      AirportName,
+      Fir,
+      PhoeneticLetterName,
+      AirportIdent,
+      LatLong,
+      MultipleWord,
+      Navaid,
+      PublishedFiveLetterName,
+      PublishedLessThanFiveLetterName,
+      AptRwyRelated,
+      Uir
+    };
+
     ///
     enum class FreqUnitOfMeasure
     {
@@ -336,6 +354,13 @@ namespace Arinc424
       OverlayAuthNotPublished,
       PbnRnpGps,
       LocOnlyIls
+    };
+
+    /// The localizer Marker Indicator enums for the Name format Indicator Field.
+    enum class LocalizerMarkerIndicator
+    {
+      OfficialFiveLetter,
+      NoPublishedFiveLetter
     };
 
     /// This data type indicates if the latitude is north or south.
@@ -558,6 +583,14 @@ namespace Arinc424
       Mandatory, ///< Mandatory Speed, Cross Fix AT speed specified in Speed Limit
       Minimum,
       Maximum
+    };
+
+    /// The Fix Position Indicator field contains an indication as to which TAA Initial Approach Fix (IAF) the data in the record applies.
+    enum class TAASectorIdentifier
+    {
+      StraightInOrCenterFix,
+      LeftBase,
+      RightBase
     };
 
     /// The TCH Units Indicator field is used in Path Point Records to define the units, Feet or Meters for the Path Point TCH.

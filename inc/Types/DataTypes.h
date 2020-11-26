@@ -147,6 +147,15 @@ namespace Arinc424
     /// Restricted to 4 digits and 1 fraction digit.
     typedef xs::decimal DistanceNM;
 
+    /// Limited to 4 digits
+    typedef xs::unsignedInt DistanceIntegerNMFourDigits;
+
+    /// Limited to 3 digits
+    typedef DistanceIntegerNMFourDigits DistanceIntegerNM;
+
+    /// Limited to 2 digits
+    typedef DistanceIntegerNM DistanceIntegerNMTwoDigits;
+
     /// Elevation of the respective feature.
     /// Restricted to the range -1500 to 20000
     typedef int Elevation;
@@ -329,6 +338,19 @@ namespace Arinc424
     ///
     typedef unsigned char MultipleIndicator;
 
+    /// The “Name Format Indicator” field is used to describe the format of the “Waypoint Name/Description” field (5.43).
+    /// This field will be formatted according to the rules described in Chapter 7 of this Specification, Waypoint Naming Conventions.
+    class NameFormatIndicator
+    {
+      public:
+        NameFormatIndicator();
+        ~NameFormatIndicator();
+
+      private:
+        Enum::FixType fixType;
+        Enum::LocalizerMarkerIndicator localizerMarkerIndicator;
+    };
+
     ///
     class NdbNavaidClass
     {
@@ -406,6 +428,9 @@ namespace Arinc424
         /// All other waypoints may be classified as non compulsory reporting points and are reported only when specifically requested by ATC.
         xs::boolean isAtcCompulsoryReportingPoint;
     };
+
+    /// The altitude shown in the Sector Altitude field provides a 1000 foot obstacle clearance with a specified radius from the navigational facility/fix. The Radius Limit, field allows the radius to be specified.
+    typedef DistanceIntegerNMTwoDigits RadiusLimit;
 
     /// The “Reference Path Data Selector” field enables the automatic tuning of a procedure by Ground Based Augmentation Systems (GBAS) avionics.
     /// This data is not used for SBAS operations.
@@ -485,6 +510,25 @@ namespace Arinc424
         RunwayIdentifier runwayIdentifier;
     };
 
+    /// When used on MSA Records, the “Sector Bearing” contains beginning and ending bearing values, referenced to the MSA Center, for each sector of the MSA.
+    /// When used on TAA records, the “Sector Bearing” contains the beginning and ending bearings that define a TAA Area and are referenced to the TAA Initial Approach Fix (IAF) Waypoint.
+    /// Limited to 3 digits
+    typedef xs::unsignedInt SectorBearing;
+
+    /// This class represents the details for a MSA or TAA Sector.
+    class Sector
+    {
+      public:
+        Sector();
+        ~Sector();
+
+      private:
+        xs::unsignedInt sectorAltitude;
+        Type::SectorBearing sectorBearingBegin;
+        Type::SectorBearing sectorBearingEnd;
+        Type::RadiusLimit sectorRadius;
+    };
+
     /// For Route Type Records - A route of flight is defined by a series of records taken in order.
     /// The “Sequence Number” field defines the location of the record in the sequence defining the route of flight identified in the route identifier field.
     /// For Boundary Type Records - A boundary is defined by a series of records taken in order.
@@ -495,6 +539,19 @@ namespace Arinc424
     /// The Speed Limit field defines a speed, expressed in Knots, Indicated (K.I.A.S.), for a fix in a terminal procedure or for an airport or heliport terminal environment.
     /// Restricted to less than 1000.
     typedef unsigned int SpeedLimit;
+
+    /// This class represents the details for a TAA Sector.
+    class TAASectorDetails : public Sector
+    {
+      public:
+        TAASectorDetails();
+        virtual ~TAASectorDetails();
+
+      private:
+        Type::RadiusLimit sectorRadiusStart;
+        Type::RadiusLimit sectorRadiusEnd;
+        xs::boolean procedureTurn;
+    };
 
     /// “Theta” is defined as the magnetic bearing to the waypoint identified in the record’s “FIX Ident” field from the Navaid in the “Recommended Navaid” field.
     typedef BearingValue Theta;
@@ -532,6 +589,76 @@ namespace Arinc424
     /// Vertical Scale Factor (VSF) is used to set the vertical deviation scale.
     /// Restricted to 3 digits
     typedef xs::unsignedInt VerticalScaleFactor;
+
+    /// The “Waypoint Type” field identifies a number of data conditions.
+    ///
+    ///   1. The first is whether or not the waypoint has been published in an official government source or created during database coding of routes or procedures.
+    ///   2. The second is whether or not the waypoint is an intersection and /or DME fix formed with reference to ground based navaids or is an RNAV Waypoint formed by the latitude and longitude.
+    ///   3. The third is an indication of one or more functions assigned to that waypoint in terminal procedure coding.
+    ///   4. The fourth is an indication of location of the waypoint with reference to airspace boundaries and /or grid lines.
+    ///   5. The fifth is an indication of how ATC might be using the waypoint in operational clearances.
+    ///   6. The sixth is an indication that the waypoint has been published for VFR use only.
+    ///   7. Lastly, there is an indication of whether the waypoint is published for use in terminal procedure coding of a specific type, multiple types or not published at all.
+    class WaypointType
+    {
+      public:
+        WaypointType();
+        ~WaypointType();
+
+      private:
+        xs::boolean isAirwayIntersection;
+        xs::boolean isArcCenter;
+        xs::boolean isBackMarker;
+        xs::boolean isControlledAirspaceIntersection;
+        xs::boolean isEnroute;
+        xs::boolean isFACF;
+        xs::boolean isFAF;
+        xs::boolean isFIRorFRAEntryPoint;
+        xs::boolean isFIRorFRAExitPoint;
+        xs::boolean isFirUirFix;
+        xs::boolean isForApproach;
+        xs::boolean isForSID;
+        xs::boolean isForStar;
+        xs::boolean isForMultipleProcedures;
+        xs::boolean isFRADepartureTransitionPoint;
+        xs::boolean isFRATerminalHoldingPoint;
+        xs::boolean isFullDegreeLatFix;
+        xs::boolean isHalfDegreeLatFix;
+        xs::boolean isHelicopterOnlyAirwayFix;
+        xs::boolean isInitialApproachFix;
+        xs::boolean isInitialDepartureFix;
+        xs::boolean isInnerMarker;
+        xs::boolean isIntermediateApproachFix;
+        xs::boolean isIntersectionDmeFix;
+        xs::boolean isMiddleMarker;
+        xs::boolean isMissedApproachPoint;
+        xs::boolean isNDB;
+        xs::boolean isOceanicGateway;
+        xs::boolean isOffRoute;
+        xs::boolean isOuterMarker;
+        xs::boolean isRequiredOffRoute;
+        xs::boolean isRfLegNotProcedureFix;
+        xs::boolean isRNAV;
+        xs::boolean isUsageRNAV;
+        xs::boolean isSourceProvidedEnroute;
+        xs::boolean isStepDownFix;
+        xs::boolean isUncharted;
+        xs::boolean isUnnamed;
+        xs::boolean isVFR;
+    };
+
+    /// The waypoint usage field is employed to indicate the structure in which the waypoint is utilized.
+    class WaypointUsage
+    {
+      public:
+        WaypointUsage();
+        ~WaypointUsage();
+
+      private:
+        xs::boolean isHi;
+        xs::boolean isLo;
+        xs::boolean isTerminal;
+    };
 
   } // namespace Type
 } // namespace Arinc424
