@@ -122,12 +122,69 @@ namespace Arinc424
       AssignedIfNotProvided ///< Official government source states that the altitude will be assigned by ATC or if no altitude is supplied
     };
 
-    /// The “Record Type” field content indicates whether the record data are “standard,” i.e., suitable for universal application, or “tailored,” i.e. included on the master file for a single user’s specific purpose.
-    /// Record type is set to tailored if any extension points are included in the record or if any ARINC 424 XML schemas are modified.
-    enum class RecordType
+    /// The Communication Class field will designate the major grouping of the Communication Types contained in the record.
+    enum class CommunicationClass
     {
-      Standard,
-      Tailored
+      LIRC,
+      LIRI,
+      USVC,
+      ASVC,
+      ATCF,
+      GNDF,
+      AOTF,
+      AFAC
+    };
+
+    /// The “Communication Type” is a three-character code indicating the type of communications service available on the frequency contained in the record.
+    /// Decoding is available in the Communication Type Translation Table.
+    enum class CommunicationType
+    {
+      ACC, ///< Area Control Center
+      ACP, ///< Airlift Command Post
+      AIR, ///< Air to Air
+      APP, ///< Approach Control
+      ARR, ///< Arrival Control
+      ASO, ///< Automatic Surface Observing System (ASOS)
+      ATI, ///< Automatic Terminal Info Service (ATIS)
+      AWI, ///< Airport Weather Information Broadcast (AWIB)
+      AWO, ///< Automatic Weather Observing Service (AWOS)
+      AWS, ///< Aerodrome Weather Information Services (AWIS)
+      CBA, ///< Class B Airspace
+      CCA, ///< Class C Airspace
+      CLD, ///< Clearance Delivery
+      CPT, ///< Clearance, Pre-Taxi
+      CTA, ///< Control Area (Terminal)
+      CTF, ///< Common Traffic Advisory Frequencies (Note 2)
+      CTL, ///< Control
+      DEP, ///< Departure Control
+      DIR, ///< Director (Approach Control Radar)
+      EFS, ///< Enroute Flight Advisory Service (EFAS)
+      EMR, ///< Emergency
+      FSS, ///< Flight Service Station
+      GCO, ///< Ground Comm Outlet
+      GND, ///< Ground Control
+      GTE, ///< Gate Control
+      HEL, ///< Helicopter Frequency
+      INF, ///< Information
+      MBZ, ///< Mandatory Broadcast
+      MIL, ///< Military Frequency Zone (note 2)
+      MUL, ///< Multicom
+      OPS, ///< Operations
+      PAL, ///< Pilot Activated Lighting (Note 1)
+      RDO, ///< Radio
+      RDR, ///< Radar
+      RFS, ///< Remote Flight Service Station (RFSS)
+      RMP, ///< Ramp/Taxi Control
+      RSA, ///< Airport Radar Service Area (ARSA)
+      TCA, ///< Terminal Control Area (TCA)
+      TMA, ///< Terminal Control Area (TMA)
+      TML, ///< Terminal
+      TRS, ///< Terminal Radar Service Area (TRSA)
+      TWE, ///< Transcriber Weather Broadcast (TWEB)
+      TWR, ///< Tower, Air Traffic Control
+      UAC, ///< Upper Area Control
+      UNI, ///< Unicom
+      VOL  ///< Volnet
     };
 
     enum class ControlledASIndicator
@@ -138,14 +195,6 @@ namespace Arinc424
       WithinOrBelowTmsTca,
       WithinOrBelowRadarZone,
       WithinOrBelowClassB
-    };
-
-    enum class LongestRunwaySurfaceCode
-    {
-      Undefined,
-      Hard,
-      Soft,
-      Water
     };
 
     enum class DatumCode
@@ -292,6 +341,33 @@ namespace Arinc424
       ZAN  /// Zanderij
     };
 
+    enum class DayOfWeek
+    {
+      Monday,
+      Tuesday,
+      Wednesday,
+      Thursday,
+      Friday,
+      Saturday,
+      Sunday
+    };
+
+    /// The “Distance Description” field will designate whether a communication frequency is to be used from the facility out to a specified distance or from a specified distance and beyond in the Airport Communication Record.
+    /// In the VHF Navaid Limitation Continuation Record, the field is used to define whether the limitation applies from the navaid out to a specified distance or from a specified distance and beyond.
+    enum class DistanceDescription
+    {
+      OutToSpecifiedDistance, ///< The communication frequency or navaid limitation is out to a specified distance.
+      AppliesBeyondDistance,  ///< The communication frequency is used or the navaid limitation applies beyond a specified distance.
+      NoRestriction           ///< No restrictions/limitations apply
+    };
+
+    /// This data type indicates if the longitude is east or west.
+    enum class EastWest
+    {
+      East,
+      West
+    };
+
     /// Fix Type Enums for the field Name Format Indicator
     enum class FixType
     {
@@ -308,6 +384,22 @@ namespace Arinc424
       PublishedLessThanFiveLetterName,
       AptRwyRelated,
       Uir
+    };
+
+    /// The Frequency Units field will designate the frequency spectrum area for the frequency in the Communication Frequency (Section 5.103) field as indicated in the table or will designate the content of the Communication Frequency field as a channel.
+    /// For VHF based units, the field will also designate the established frequency spacing required of the frequency for unambiguous use.
+    enum class FrequencyUnits
+    {
+      LowFreq,            ///< Low Frequency
+      MediumFreq,         ///< Medium Frequency
+      HighFreq,           ///< High Frequency(3000 kHz to 30,000 kHz)
+      Vhf100kHzSpacing,   ///< Very High Frequency 100 kHz spacing
+      Vhf50kHzSpacing,    ///< Very High Frequency 50 kHz spacing
+      Vhf25kHzSpacing,    ///< Very High Frequency 25 kHz spacing
+      VhfNonStandard,     ///< Very High Frequency (30,000 kHz to 200 MHz) Non-standard spacing
+      Uhf,                ///< Ultra High Frequency (200 MHz to 3000 MHz)
+      Vhf8_33Spacing,     ///< Very High Frequency Communication Channel for 8.33kHz spacing
+      DigitalService      ///< Digital Service
     };
 
     ///
@@ -356,25 +448,12 @@ namespace Arinc424
       LocOnlyIls
     };
 
-    /// The localizer Marker Indicator enums for the Name format Indicator Field.
-    enum class LocalizerMarkerIndicator
+    /// The “24H Indicator” field is used to indicate whether a communication service frequency is available for use on a continual, i.e. 24 hours a day, seven days a week, basis or not.
+    enum class H24Indicator
     {
-      OfficialFiveLetter,
-      NoPublishedFiveLetter
-    };
-
-    /// This data type indicates if the latitude is north or south.
-    enum class NorthSouth
-    {
-      North,
-      South
-    };
-
-    /// This data type indicates if the longitude is east or west.
-    enum class EastWest
-    {
-      East,
-      West
+      Unknown,
+      Continious,   ///< Frequency is continually available
+      NotContinious ///< Frequency is not continually available
     };
 
     /// The Leg Inbound/Outbound Indicator is used to identify the Leg Length or Leg Time field values (5.64 or 5.65) as being applicable to either the inbound or the outbound leg of a holding pattern or race track course reversal.
@@ -401,6 +480,22 @@ namespace Arinc424
       LNAV_VNAV
     };
 
+    /// The localizer Marker Indicator enums for the Name format Indicator Field.
+    enum class LocalizerMarkerIndicator
+    {
+      OfficialFiveLetter,
+      NoPublishedFiveLetter
+    };
+
+    /// The “Longest Runway Surface Code” field is used to define whether or not there is a hard surface runway at the airport, the length of which is indicated in the Longest Runway field.
+    enum class LongestRunwaySurfaceCode
+    {
+      Undefined,  ///< Undefined, surface material not provided in source
+      Hard,       ///< Hard Surface, for example, asphalt or concrete
+      Soft,       ///< Soft Surface, for example, gravel, grass or soil
+      Water       ///< Water Runway
+    };
+
     /// The field has multiple definitions.
     /// For Airport and Heliport Primary Records, it is used to indicate that all bearing and course detail for that airport are included in the data base with a reference to either Magnetic North or to True North.
     /// The field is blank in Airport Record when the data base contains a mix of magnetic and true bearing or course information for the airport.
@@ -420,6 +515,22 @@ namespace Arinc424
       East, ///< Magnetic variation is East of TRUE North
       West, ///< Magnetic variation is West of TRUE North
       True  ///< The element defined in the current record is provided TRUE.
+    };
+
+    /// The Modulation field will design the type of modulation for the frequency in the Communication Frequency (5.103) field.
+    enum class Modulation
+    {
+      AmFreq, ///< Amplitude Modulated Frequency
+      FmFreq  ///< Frequency Modulated Frequency
+    };
+
+    /// The Multi-Sector Indicator field is used to indicate that the communication service and frequency are used in more than one defined sector.
+    /// The actual sector data will be contained in the primary and continuation records of the affected airport or heliport communication record set.
+    enum class MultiSectorIndicator
+    {
+      MultiSector,      ///< Multi-sector data is published in official government source for the service and frequency
+      NotDefined,       ///< There is no defined sector data published for the service and frequency.
+      OnlyOneFromSource ///< The official government source has provided only a single defined sector for the service and frequency
     };
 
     /// The NavaidNDBEmissionType field identifies the characteristics of the NAVAID facility.
@@ -464,6 +575,13 @@ namespace Arinc424
       MarineBeacon
     };
 
+    /// This data type indicates if the latitude is north or south.
+    enum class NorthSouth
+    {
+      North,
+      South
+    };
+
     /// The Path and Termination defines the path geometry for a single record of an ATC terminal procedure.
     enum class PathAndTermination
     {
@@ -500,6 +618,32 @@ namespace Arinc424
       Civil,    ///< Airport/Heliport is open to the public
       Military, ///< Airport/Heliport is military airport
       Joint     ///< Airport/Heliport is joint Civil and Military
+    };
+
+    /// The Radar field indicates whether or not the communication unit identified in the record has access to and uses information derived from primary or secondary radars while performing the communication service indicated by the Communication Type.
+    /// It is not an indication of an operational radar frequency.
+    enum class Radar
+    {
+      PrimaryOrSecondary, ///< Primary or secondary Radar information is available to the service
+      No,                 ///< If the Service documentation specifically states that the service does not have access to primary or secondary radar information
+      Unknown             ///< If the Source documentation does not provide details on the radar information access for the services
+    };
+
+    /// The “Record Type” field content indicates whether the record data are “standard,” i.e., suitable for universal application, or “tailored,” i.e. included on the master file for a single user’s specific purpose.
+    /// Record type is set to tailored if any extension points are included in the record or if any ARINC 424 XML schemas are modified.
+    enum class RecordType
+    {
+      Standard,
+      Tailored
+    };
+
+    /// Indicates that the start or end time is relative to sunset or sunrise.
+    enum class RelativeTimeIndicator
+    {
+      BeforeSunrise,
+      AfterSunrise,
+      BeforeSunset,
+      AfterSunset
     };
 
     /// This field provides information on the ICAO PBN Navigation Specification applicable to this procedure.
@@ -570,6 +714,50 @@ namespace Arinc424
       Fifteen
     };
 
+    /// The Service Indicator field is used to further define the use of the frequency for the specified Communication Type.
+    enum class ServiceIndicatorAirportHeliportFrequency
+    {
+      ATF,  ///< Aerodrome Traffic Frequency (ATF)
+      CTAF, ///< Common Traffic Advisory Frequency (CTAF)
+      MF,   ///< Mandatory Frequency (MF)
+      SF,   ///< Secondary Frequency
+    };
+
+    /// The Service Indicator field is used to further define the use of the frequency for the specified Communication Type.
+    enum class ServiceIndicatorAirportHeliportInformation
+    {
+      VDF,              ///< VHF Direction Finding Service (VDF)
+      NotEnglish,       ///< Language other than English
+      MilitaryUseFreq,  ///< Military Use Frequency
+      PCL,              ///< Pilot Controlled Light (PCL)
+    };
+
+    /// The Service Indicator field is used to further define the use of the frequency for the specified Communication Type.
+    enum class ServiceIndicatorAirportHeliportService
+    {
+      AAS,                ///< Airport Advisory Service (AAS)
+      CARC,               ///< Community Aerodrome Radio Station (CARS)
+      DepartureService,   ///< Departure Service (Other than Departure Control Unit)
+      FIS,                ///< Flight Information Service (FIS)
+      IC,                 ///< Initial Contact (IC)
+      ArrivalService,     ///< Arrival Service (Other than Arrival Control Unit)
+      AFIS,               ///< Aerodrome Flight Information Service(AFIS)
+      TerminalAreaControl ///< Terminal Area Control (Other than dedicated Terminal Control Unit)
+    };
+
+    /// High Frequency (HF) signals used in aeronautical communications can be the complete signal or a portion of the signal, called a sideband.
+    /// The Signal Emission field will designate for each HF Frequency what emission is used.
+    enum class SignalEmission
+    {
+      A3,             ///< Double Sideband (A3)
+      A3a,            ///< Single sideband, reduced carrier (A3A)
+      A3b,            ///< Two Independent sidebands (A3B)
+      A3h,            ///< Single sideband, full carrier (A3H)
+      A3j,            ///< Single sideband, suppressed carrier (A3J)
+      LsbCarrierUnk,  ///< Lower (single) sideband, carrier unknown
+      UsbCarrierUnk   ///< Upper (single) sideband, carrier unknown
+    };
+
     /// The "Speed Limit Description" field will designate whether the speed limit coded at a fix in a terminal procedure description is a mandatory, minimum or maximum speed.
     /// For Maximum speeds: The SID Procedure Records and Missed Approach Procedures speed limit will apply to all legs up to and including the termination of the leg on which the speed is coded from the beginning of the procedure or a previous speed limit.
     /// If a different speed is coded on a subsequent leg, the limit will be applied for that leg and from that leg backwards to the previous terminator which contained a speed limit.
@@ -598,6 +786,18 @@ namespace Arinc424
     {
       Feet,
       Meters
+    };
+
+    /// “Time Code” is used in a Time of Operations Record to indicate how to interpret the other fields in Time of Operations records.
+    enum class TimeCode
+    {
+      ContinuousIncludingHolidays,
+      ContinuousExcludingHolidays,
+      SpecifiedExcludingHolidays,
+      SpecifiedIncludingHolidays,
+      Complex,
+      ByNotam,
+      Unspecified
     };
 
     /// The “Turn Direction” field specifies the direction in which Terminal Procedure turns are to be made.

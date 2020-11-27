@@ -65,7 +65,7 @@ namespace Arinc424
         std::list<Type::SectorizationNarrative> portCommunicationSectorizationNarrative;
         Type::PointReference sectorFacility;
         Type::Sectorization sectorization;
-        Type::AirportHeliportCOmmunicationServiceIndicator serviceIndicator;
+        Type::AirportHeliportCommunicationServiceIndicator serviceIndicator;
         std::list<Type::AdditionalSectorization> additionalSectorization;
     };
   }

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Enumerations.h"
-
 #include "../xs.h"
+#include <list>
 
 namespace Arinc424
 {
@@ -18,11 +18,24 @@ namespace Arinc424
       private:
     };
 
+    /// The “Service Indicator” field is used to further define the use of the frequency for the specified Communication Type.
+    class AirportHeliportCommunicationServiceIndicator
+    {
+      public:
+        AirportHeliportCommunicationServiceIndicator();
+        ~AirportHeliportCommunicationServiceIndicator();
+
+      private:
+        Enum::ServiceIndicatorAirportHeliportFrequency serviceIndicatorAirportHeliportFrequency;
+        Enum::ServiceIndicatorAirportHeliportInformation serviceIndicatorAirportHeliportInformation;
+        Enum::ServiceIndicatorAirportHeliportService serviceIndicatorAirportHeliportService;
+    };
+
     /// The all-numeric altitude field will contain altitudes in feet with a resolution of one foot.
     /// If isFlightLevel is true, this element represents altitude as a flight level.
     /// The contents of this field only contain the numerical portion of the flight level expressed in hundreds of feet (e.g., 120, 1, or 10).
     /// Restricted to the range -2000 to 99999.
-    typedef int AltitudeValue;
+    typedef xs::integer AltitudeValue;
 
     class Altitude
     {
@@ -63,6 +76,11 @@ namespace Arinc424
     /// Restricted to exactly 5 digits.
     typedef xs::unsignedInt Channel;
 
+    /// The “Communication Distance” field is used to define the distance restriction a communication frequency is to be used within or beyond when such restrictions apply.
+    /// This field is used in conjunction with the Distance Description field.
+    /// Limited to 2 digits
+    typedef xs::unsignedInt CommunicationDistance;
+
     /// Restricted to the range 0 to 360 degrees
     typedef xs::decimal CompassValue;
 
@@ -98,6 +116,11 @@ namespace Arinc424
     /// In Holding Patterns, this is the turning radius, inbound to outbound leg, for RNP Holding.
     /// The ARC Radius field is also used to specify the turn radius of RNP holding patterns included in SID, STAR, and Approach Records as HA, HF, and HM legs.
     typedef DistanceNMThousanths ARCRadius;
+
+    /// The “Call Sign” field contains the name of a communications service provider that is to be used when contacting that service/used by the service to identify itself when contacting aircraft on the frequencies contained in the record.
+    /// The field is also used to provide the broadcast identification name of automated services.
+    /// Limited to 25 characters.
+    typedef xs::string CallSign;
 
     /// The “Core Identifier” field contains the character-name-code, or other series of characters, with which the object is identified.
     /// This includes Waypoint Identifiers, VHF NAVAID Identifiers, NDB NAVAID identifier, Airport Identifiers, Runway Identifiers, and other objects.
@@ -158,10 +181,13 @@ namespace Arinc424
 
     /// Elevation of the respective feature.
     /// Restricted to the range -1500 to 20000
-    typedef int Elevation;
+    typedef xs::integer Elevation;
 
     /// The “Ellipsoidal Height” field is the height of a surveyed point in reference to the WGS-84 ellipsoid.
     typedef xs::decimal EllipsoidHeight;
+
+    /// The “Facility Elevation” field provides the elevation of navaids and communication transmitters.
+    typedef xs::integer FacilityElevation;
 
     /// The “Final Approach Segment Data CRC Remainder” field is an eight (8) character hexadecimal representation of the 32-bit CRC value provided by the source for the information contained in the aeronautical data fields being monitored for integrity.
     /// The value is calculated by a specific mathematical algorithm, which is both machine and man processible.
@@ -214,7 +240,7 @@ namespace Arinc424
     typedef xs::boolean IFRCapability;
 
     /// This is an abstract class that is the parent class for degrees.
-    typedef int LatLongDegree;
+    typedef xs::integer LatLongDegree;
 
     /// Contains degrees of a coordinate as an integer from 0 to 90.
     typedef LatLongDegree LatDegree;
@@ -255,13 +281,13 @@ namespace Arinc424
     typedef xs::string PointReference;
 
     /// Contains minutes of a coordinate as an integer from 0 to 60.
-    typedef int Minute;
+    typedef xs::integer Minute;
 
     /// Contains seconds of a coordinate as an integer from 0 to 60.
-    typedef int Second;
+    typedef xs::integer Second;
 
     /// Contains hundredths of a coordinate as an integer from 0 to 99.
-    typedef int HundredthSecond;
+    typedef xs::integer HundredthSecond;
 
     /// The “Latitude” field contains the latitude of the navigational feature identified in the record.
     /// The latitude is a complex type that consists of children elements that contain scaled integers.
@@ -529,16 +555,27 @@ namespace Arinc424
         Type::RadiusLimit sectorRadius;
     };
 
+    /// The “Sectorization” field is used to define the airspace sector a communication frequency is applicable for when an airport defines sectors by bearing from the same point.
+    /// Limited to 6 characters.
+    typedef xs::unsignedInt Sectorization;
+
+    /// The “Sectorization Narrative” field is used to define sectors of operations for communications services on specific frequencies in a narrative format when that data cannot be formatted in the Sectorization (5.183) field.
+    /// The field may also be used to qualify the Sectorization information.
+    /// This is usually the “and” situation, meaning the communications service/frequency is to be used in the defined sector and in some other defined situation that cannot be formatted such as Sectorization.
+    /// An example is “309127” in the Sectorization field and “When Departing Runway 31L/R” in the Narrative field.
+    /// Limited to 60 characters.
+    typedef xs::string SectorizationNarrative;
+
     /// For Route Type Records - A route of flight is defined by a series of records taken in order.
     /// The “Sequence Number” field defines the location of the record in the sequence defining the route of flight identified in the route identifier field.
     /// For Boundary Type Records - A boundary is defined by a series of records taken in order.
     /// The “Sequence Number” field defines the location of the record in the sequence defining a boundary. For Record Types requiring more than one primary record to define the complete content – In a series of records used to define a complete condition, the “Sequence Number” is used to define each primary record in the sequence. For Airport and Heliport TAA Records – Sequence Number 1 will always be assigned to the record based on the Center Fix upon which the Straight-In Area is predicated, Sequence Number 2 will always be assigned to the record based on the Center Fix upon which the Left Base Area is predicated, and Sequence Number 3 will always be assigned to the record based on the Center Fix upon which the Right Base Area is predicated. Therefore, if a TAA Record has a Straight-In Area and a Right Base Area, but no Left Base Area, only Sequence Numbers 1 and 3 will be used. If a TAA Record has a Straight-In Area and a Left Base Area but no Right Base Area, only Sequence Numbers 1 and 2 will be used.
     /// Restricted to 4 digits.
-    typedef unsigned int SequenceNumber;
+    typedef xs::unsignedInt SequenceNumber;
 
     /// The Speed Limit field defines a speed, expressed in Knots, Indicated (K.I.A.S.), for a fix in a terminal procedure or for an airport or heliport terminal environment.
     /// Restricted to less than 1000.
-    typedef unsigned int SpeedLimit;
+    typedef xs::unsignedInt SpeedLimit;
 
     /// This class represents the details for a TAA Sector.
     class TAASectorDetails : public Sector
@@ -553,12 +590,81 @@ namespace Arinc424
         xs::boolean procedureTurn;
     };
 
+    ///
+    class StartOrEndTime
+    {
+      public:
+        StartOrEndTime();
+        ~StartOrEndTime();
+
+      private:
+        /// This field supports specifying a continuous time interval across multiple days.
+        /// It should not be used if the "dayOfWeek" in TimeOfOperationInterval is specified.
+        /// If used, it should be specified for both start and end times, and they should be different otherwise the TimeOfOperationInterval field should be used.
+        Enum::DayOfWeek dayOfWeek;
+
+        /// This field represents the start or end time of the TimeOfOperationInterval.
+        /// A timezone may be set for this field, in which case the time is specified in the local timezone.
+        /// If no timezone is set, UTC is assumed.
+        /// If a timezone is set indicating a local time, it should be the same for both start and end times, and the "adjustForDST" field in the enclosing TimesOfOperation instance may be set to indicate that the time follows daylight saving time in accordance with the local DST calendar.
+        xs::time time;
+
+        /// This field supports specifying the StartOrEndTime as an offset from sunrise or sunset.
+        /// In this case, the "time" field is just the offset amount such as 01:00:00 or 00:30:00.
+        /// If used, there should be no timezone set in the "time" field.
+        Enum::RelativeTimeIndicator relativeTimeIndicator;
+    };
+
     /// “Theta” is defined as the magnetic bearing to the waypoint identified in the record’s “FIX Ident” field from the Navaid in the “Recommended Navaid” field.
     typedef BearingValue Theta;
 
     /// The “Threshold Crossing Height” specifies the height above the landing threshold on a normal glide path.
     /// Limited to 3 digits.
     typedef xs::unsignedInt ThresholdCrossingHeight;
+
+    /// The “Time of Operation” field is used to indicate the times of operation of a Facility or Restriction.
+    /// See ARINC 424 5.195.
+    class TimeOfOperationInterval
+    {
+      public:
+        TimeOfOperationInterval();
+        ~TimeOfOperationInterval();
+
+      private:
+        /// This field supports specifying the same time interval on multiple days of the week in a single interval instance.
+        /// It should not be used if the "dayOfWeek" in the start and end times is specified (see documentation for StartOrEndTime).
+        /// If this field is used, and the "end" time is earlier than the "start" time, the time interval crosses midnight (00:00).
+        Enum::DayOfWeek dayOfWeek;
+        Type::StartOrEndTime start;
+        Type::StartOrEndTime end;
+    };
+
+    /// Used on airspace, flight planning, communications, and preferred route records to specify the times of operations of those entities.
+    class TimesOfOperation
+    {
+      public:
+        TimesOfOperation();
+        ~TimesOfOperation();
+
+      private:
+        Enum::TimeCode timeCode;
+        std::list<Type::TimeOfOperationInterval> times;
+
+        /// The “Time Narrative” field is used to provide Time of Operations and/or Conditions of Operations in a narrative form when source information is too complex to be formatted in accordance with ARINC 424 Section 5.195.
+        /// This field is used in conjunction with the TimeCode value "Complex".
+        /// This field is used on Airport, Heliport, and Enroute Communication Continuation records.
+        xs::string timeNarrative;
+
+        /// Restrictive Airspace areas and communications facilities may not have established active times and are activated by NOTAM only or may be active by NOTAM in addition to established times.
+        /// If this field is "True", the area or communcations facility is active by NOTAM in addition to the specified time intervals.
+        /// If the the area or communication facility is active by NOTAM only, this field should not be used and the timeCode "ByNotam" should be used.
+        /// Used on Controlled and Restrictive Airspace Primary and Continuation records, and Airport, Heliport and Enroute Communications Continuation records.
+        xs::boolean byNotam;
+
+        /// Indicates that the "times" instances in this record follow daylight saving time in accordance with the local DST calendar.
+        /// See documentation for the "time" field in the StartOrEndTime records.
+        xs::boolean adjustForDST;
+    };
 
     /// The standard time zone system is based on the division of world into 24 zones, each of 15 degrees longitude.
     /// The “zero” time zone is entered at Greenwich meridian with longitudes 7 degrees, 30 minutes West and 7 degrees, 30 minutes east, and there is no difference in the standard time of this time zone and Greenwich Mean Time.
@@ -571,8 +677,8 @@ namespace Arinc424
         ~TimeZone();
 
       private:
-        int hourOffset; ///< From -14 to +12
-        int minuteOffset;
+        xs::integer hourOffset; ///< From -14 to +12
+        xs::integer minuteOffset;
     };
 
     /// The “Transition Altitude” field defines the altitude in the vicinity of an airport or heliport at or below which the vertical position of an aircraft is controlled by reference to altitudes (MSL).
