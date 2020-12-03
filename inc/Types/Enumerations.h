@@ -6,6 +6,65 @@ namespace Arinc424
 {
   namespace Enum
   {
+    /// The field NDBNavaidAddInfo is the fourth character of the 5 character Navaid class, when used in NDB Navaid Record – NDBs and Terminal NDBs.
+    /// It contains additional information on the Navaid.
+    enum class AhLocalizerMarkerLocatorAddInfo
+    {
+      NoVoiceOnFrequency,
+      VoiceOnFrequency
+    };
+
+    /// The field NDBNavaidCollocation is the fifth character of the 5 character Navaid class, when used in NDB Navaid Record – NDBs and Terminal NDBs.
+    /// It contains additional information on the Navaid.
+    /// It has information on the Navaid collocation.
+    enum class AhLocalizerMarkerLocatorCollocation
+    {
+      /// BFO Operation.
+      /// Use of Beat Frequency Oscillator type of equipment is required to received an aural identification signal.
+      BfoOperation,
+
+      /// Locator/Marker Collocated.
+      /// The latitude/longitude position of the Locator and Marker are identical.
+      LocatorMarkerCollocated,
+
+      /// Locator/Middle Marker Not Collocated.
+      /// The latitude/longitude position of Locator and Marker are not identical.
+      LocatorMiddleMarkerNotCollocated
+    };
+
+    /// The field NDBNavaidCoverage is the first character of the 5 character Navaid class, when used in NDB Navaid Record – NDBs and Terminal NDBs.
+    enum class AhLocalizerMarkerLocatorCoverage
+    {
+      /// Generally usable within 75NM of the facility at all altitudes.
+      HighPowerNdb,
+
+      /// Generally usable within 50NM of the facility at all altitudes.
+      Ndb,
+
+      /// Generally usable within 25NM of the facility at all altitudes.
+      LowPowerNdb,
+
+      /// Generally usable within 15NM of the facility at all altitudes.
+      Locator
+    };
+
+    /// The field NDBNavaidFacility1 is the first character of the 5 character Navaid class, when used in NDB Navaid Record – NDBs and Terminal NDBs.
+    enum class AhLocalizerMarkerLocatorFacility1
+    {
+      Ndb,
+      Sabh,
+      MarineBeacon
+    };
+
+    /// The field NDBNavaidFacility2 is the second character of the 5 character Navaid class, when used in NDB Navaid Record – NDBs and Terminal NDBs.
+    enum class AhLocalizerMarkerLocatorFacility2
+    {
+      InnerMarker,
+      MiddleMarker,
+      OuterMarker,
+      BackMarker
+    };
+
     /// The "Altitude Description" field will designate whether a waypoint should be crossed "at," "at or above," "at or below" or "at or above to at or below" specified altitudes. The field is also used to designate recommended altitudes and cases where two distinct altitudes are provided at a single fix.
     enum class AltitudeDescription
     {
@@ -120,6 +179,14 @@ namespace Arinc424
     {
       ModifiedOrAssigned, ///< Altitude can be modified or assigned by ATC.
       AssignedIfNotProvided ///< Official government source states that the altitude will be assigned by ATC or if no altitude is supplied
+    };
+
+    /// The ATC Weight Category field used on Flight Planning Arrival/Departure Data Records is derived from government source and is included whenever a given procedure included in the record is restricted to, or designed for, a specific aircraft weight grouping.
+    enum class ATCWeightCategory
+    {
+      Heavy,  ///< Heavy, all aircraft types of 136,000kg (300000LB) or more.
+      Medium, ///< Medium, aircraft types less than 136,000kg (300,000LB) and more than 7,000kg (155,000LB).
+      Light,  ///< Light, aircraft types of 7,000kg (155,000LB) or less.
     };
 
     /// The Communication Class field will designate the major grouping of the Communication Types contained in the record.
@@ -368,6 +435,17 @@ namespace Arinc424
       West
     };
 
+    /// The Fix Related Transition Code is used on Flight Planning Arrival/Departure Data Continuation Records containing Intermediate Fix information and provides an indication, through use of the standard coding practices of separating the procedure into transitions, as to where in the procedure the intermediate fix is located.
+    enum class FixRelatedTransitionCode
+    {
+      One,    ///< Fix Located in SID Runway Transition
+      Two,    ///< Fix Located in SID Common Portion
+      Three,  ///< Fix Located in SID Enroute Transition
+      Four,   ///< Fix Located in STAR Enroute Transition
+      Five,   ///< Fix Located in STAR Common Portion
+      Six,    ///< Fix Located in STAR Runway Transition
+    };
+
     /// Fix Type Enums for the field Name Format Indicator
     enum class FixType
     {
@@ -456,11 +534,59 @@ namespace Arinc424
       NotContinious ///< Frequency is not continually available
     };
 
+    /// The Helipad Performance Requirement is used to identify any restriction imposed on helicopter performance in order to use a given helipad.
+    enum class HelicopterPerformanceReq
+    {
+      Unknown,
+      MultiEngine,
+      SingleEngineOnly
+    };
+
+    /// The Helipad Shape field defines the geometric shape of a helipad as being either circle, or rectangular.
+    /// If the object is a runway the port contains runway elements.
+    enum class HelipadShape
+    {
+      Undefined,
+      Circle,
+      SquareAndOrRectangle
+    };
+
+    /// The Facility Characteristics field identifies the characteristics of the NAVAID facility.
+    enum class ILSBackCourse
+    {
+      Undefined,
+      Usable,
+      Unusable,
+      Restricted
+    };
+
+    /// The “ILSDMELocation” field identifies the characteristics of the NAVAID facility.
+    enum class ILSDMELocation
+    {
+      NotCollocated,        ///< Not collocated with Localizer or Glide Slope
+      CollocatedLocalizer,  ///< Collocated with localizer
+      CollocatedGlideSlope  ///< Collocated with Glide Slope
+    };
+
     /// The Leg Inbound/Outbound Indicator is used to identify the Leg Length or Leg Time field values (5.64 or 5.65) as being applicable to either the inbound or the outbound leg of a holding pattern or race track course reversal.
     enum class LegInboundOutboundIndicator
     {
       Inbound,
       Outbound
+    };
+
+    ///
+    enum class LegTypeCodeSC
+    {
+      PointToPoint, ///< Straight Point to Point
+      Curved        ///< Curved line Flight Track
+    };
+
+    ///
+    enum class LegTypeTurnIndication
+    {
+      Left,
+      Right
     };
 
     /// The “Level of Service Authorized” field defines whether the Level of Service designated in an associated field (Section 5.275) is authorized or not authorized for a procedure.
@@ -478,6 +604,23 @@ namespace Arinc424
       LP,
       LNAV,
       LNAV_VNAV
+    };
+
+    /// The “Localizer/Azimuth Position Reference” field indicates whether the antenna is situated beyond the stop end of the runway, ahead of or beyond the approach end of the runway.
+    /// The “Back Azimuth Position Reference” field indicates whether the antenna is situated ahead of the approach end of the runway, ahead of or beyond the stop end of the runway.
+    enum class LocalizerAzimuthPositionReference
+    {
+      /// For Localizer and Azimuth positions the field is blank (@) when the antenna is situated beyond the stop end of the runway.
+      /// For Back Azimuth positions the field is blank (@) when the antenna is situated ahead of the approach end of the runway.
+      cBeyondStopEnd,
+
+      /// For Localizer and Azimuth positions the field contains a plus (+) sign when the antenna is situated ahead of the approach end of the runway.
+      /// For Back Azimuth positions the field contains a plus (+) sign when the antenna is situated beyond the stop end of the runway.
+      BeforeApproachEnd,
+
+      /// For Localizer and Azimuth positions the field contains a plus (-) sign when the antenna is located off to one side of the runway.
+      /// For Back Azimuth positions the field contains a plus (-) sign when it is located off to one side of the runway.
+      OffToSide
     };
 
     /// The localizer Marker Indicator enums for the Name format Indicator Field.
@@ -515,6 +658,34 @@ namespace Arinc424
       East, ///< Magnetic variation is East of TRUE North
       West, ///< Magnetic variation is West of TRUE North
       True  ///< The element defined in the current record is provided TRUE.
+    };
+
+    /// The “Marker Type” field defines the type of marker.
+    enum class MarkerType
+    {
+      IM, ///< Inner Marker
+      MM, ///< Middle Marker
+      OM, ///< Outer Marker
+      BM, ///< Back Marker
+      L   ///< Locator at Marker
+    };
+
+    ///
+    enum class MLSApproachAzimuthScanRate
+    {
+      /// Where a high-rate approach azimuth guidance is not available, enter blank.
+      AzimuthNotAvailable,
+
+      /// Where a high-rate approach azimuth guidance is available, enter “H”.
+      AzimuthAvailable
+    };
+
+    /// The Facility Characteristics field identifies the characteristics of the NAVAID facility.
+    enum class MLSDMELocation
+    {
+      CollocatedAzimuth,    ///< Collocated with Azimuth
+      CollocatedElevation,  ///< Collocated with Elevation
+      NotCollocated         ///< Not Collocated with Azimuth or Elevation
     };
 
     /// The Modulation field will design the type of modulation for the frequency in the Communication Frequency (5.103) field.
@@ -610,6 +781,40 @@ namespace Arinc424
       VR, ///< Heading to a Radial Termination
     };
 
+    /// The Localizer/MLS/GLS Performance Categories have established operating minimums and are listed as Category I, II, and III.
+    /// The level of Performance Category does not imply that permission exists to use the facility for landing guidance to that level and does not limit minimal using designated classification.
+    /// This field is also used to define the classification, non- ILS/MLS/GLS, and localizer installation such as IGS, LDA, or SDF.
+    /// As used in the runway record, there are two fields, one labeled Localizer/MLS/GLS Category/Classification and the other labeled Second Localizer/MLS/GLS Category/Classification.
+    enum class PrecisionApproachCategory
+    {
+      IlsLocOnly,       ///< ILS Localizer Only, No Glideslope
+      IlsMlsGlsCat1,    ///< ILS Localizer/MLS/GLS Category I
+      IlsMlsGlsCat2,    ///< ILS Localizer/MLS/GLS Category II
+      IlsMlsGlsCat3,    ///< ILS Localizer/MLS/GLS Category III
+      Igs,              ///< IGS Facility
+      LdaGlideslope,    ///< LDA Facility with Glideslope
+      LdaNoGlideslope,  ///< LDA Facility, no Glideslope
+      SdfGlideslope,    ///< SDF Facility with Glideslope
+      SdfNoGlideSlope   ///< SDF Facility, no Glideslope
+    };
+
+    /// The Procedure Type field used on Flight Planning Arrival/Departure Data Record is a single character code indication the type of procedure in the record, such as Arrival, Standard Instrument Arrival Route, Approach.
+    enum class ProcedureType
+    {
+      ArrivalInDb,      ///< Arrival Procedure, Available in Database
+      ArrivalNotInDb,   ///< Arrival Procedure, Not Available in Database
+      DepartureInDb,    ///< Departure Procedure, Available in Database
+      DepartureNotInDb, ///< Departure Procedure, Not Available in Database
+      StarInDb,         ///< Standard Terminal Arrival Route (STAR), Available in Database
+      StarNotInDb,      ///< Standard Terminal Arrival Route (STAR), Not Available in Database
+      SidInDb,          ///< Standard Instrument Departure (SID), Available in Database
+      SidNotInDb,       ///< Standard Instrument Departure (SID), Not Available in Database
+      VectorSidInDb,    ///< Vector SID, Available in Database
+      VectorSidNotInDB, ///< Vector SID, Not Available in Database
+      ApproachInDb,     ///< Approach Procedure, Available in Database
+      ApproachNotInDb   ///< Approach Procedure, Not Available in Database
+    };
+
     /// Airports can be classified into four categories, airports open to the general public, military airports, joint use civil and military, and airports closed to the public.
     /// This field permits these airports to be categorized by their use.
     enum class PublicMilitaryIndicator
@@ -644,6 +849,21 @@ namespace Arinc424
       AfterSunrise,
       BeforeSunset,
       AfterSunset
+    };
+
+    /// The Reporting Code field used on Flight Planning Arrival/Departure Data Records is a simplification of the Waypoint Description concept.
+    /// It will provide the information on intermediate waypoints as either Position Report Required (Compulsory Report) or Position Report Not Required (On-Request Report).
+    enum class ReportingCode
+    {
+      Required,   ///< Position Report Required
+      NotRequired ///< Position Report Not Required
+    };
+
+    /// The RNAV Flag field used on Flight Planning Arrival/Departure Data Records is derived from government source and is included whenever a given procedure included in the record is restricted to, or designed for, aircraft capable of flying RNAV Procedures.
+    enum class RNAVFlag
+    {
+      Yes,  ///< The field will indicate Yes, the procedure is an RNAV procedure.
+      No    ///< The field will indicate No, the procedure is NOT an RNAV procedure.
     };
 
     /// This field provides information on the ICAO PBN Navigation Specification applicable to this procedure.
@@ -773,6 +993,16 @@ namespace Arinc424
       Maximum
     };
 
+    /// For VHF NAVAIDS, the Station Declination field contains the angular difference between true north and the zero degree radial of the NAVAID at the time the NAVAID was last site checked.
+    /// For ILS localizers, the field contains the angular difference between true north and magnetic north at the localizer antenna site at the time the magnetic bearing of the localizer course was established.
+    enum class StationDeclinationEWT
+    {
+      East,
+      West,
+      True,
+      Grid
+    };
+
     /// The Fix Position Indicator field contains an indication as to which TAA Initial Approach Fix (IAF) the data in the record applies.
     enum class TAASectorIdentifier
     {
@@ -798,6 +1028,26 @@ namespace Arinc424
       Complex,
       ByNotam,
       Unspecified
+    };
+
+    /// The content of the source field indicates whether the “True Bearing” is derived from official government sources or from other sources.
+    enum class TrueBearingSource
+    {
+      Official,
+      Other
+    };
+
+    /// The “Turboprop/Jet Indicator” field used on Flight Planning Arrival/Departure Data Records is included whenever a given procedure, normally a departure, is restricted to, or designed for, aircraft with a specific kind of engines.
+    enum class TurbopropJetIndicator
+    {
+      All,
+      JetsAndTurboProps,
+      AllCruise250OrLess,
+      NonJetAndTurboProp,
+      MultiEngineProps,
+      Jets,
+      NonJetNonTurboprop,
+      TurboProp
     };
 
     /// The “Turn Direction” field specifies the direction in which Terminal Procedure turns are to be made.

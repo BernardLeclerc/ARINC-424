@@ -37,6 +37,12 @@ namespace Arinc424
     /// Restricted to the range -2000 to 99999.
     typedef xs::integer AltitudeValue;
 
+    /// The "Altitude/Minimum Altitude" field is a choice element that may contain one of either an element of type FlightLevel or an element of type Altitude.
+    /// The “Altitude / Minimum Altitude” field indicates the reference altitude associated with
+    ///   (1) Enroute Airways(MEA, MFA or other minimum altitudes as defined by source),
+    ///   (2) holding pattern path of Holding Pattern record,
+    ///   (3) altitudes at fixes in terminal proceduresand terminal procedure path termination defined by the Path Terminator in the Airport or Heliport SID / STAR / Approach Elements and
+    ///   (4) lowest altitude of the “blocked altitudes” for a Preferred Route.
     class Altitude
     {
       public:
@@ -64,12 +70,44 @@ namespace Arinc424
         bool isUnlimited;
     };
 
-    /// The “ATA/IATA” field contains the Airport/Heliport ATA/IATA designator code to which the data contained in the record relates.
-    typedef xs::string ATAIATADesignator;
+    /// This class is an abstraction used to represent the details for an Additional Sectorization used in Airport Communications.
+    class AdditionalSectorization
+    {
+      public:
+        AdditionalSectorization();
+        ~AdditionalSectorization();
+
+      private:
+        Altitude additionalSectorizationAltitude1;
+        Altitude additionalSectorizationAltitude2;
+        Enum::AltitudeDescription additionalSectorizationAltitudeDescription;
+    };
 
     /// Identifies the approach types published on a given approach procedure which require Airport or Helicopter Operations SBAS path points.
     /// Limited to 10 characters.
     typedef xs::string ApproachTypeIdentifier;
+
+    /// The “ATA/IATA” field contains the Airport/Heliport ATA/IATA designator code to which the data contained in the record relates.
+    typedef xs::string ATAIATADesignator;
+
+    /// The “ATC Identifier” field used on Flight Planning Arrival/Departure Data Records is the indication of the officially published procedure designation which is required for Flight Planning.
+    /// Limited to 7 characters.
+    typedef xs::string ATCIdentifier;
+
+    /// The “Azimuth Coverage Sector” fields define the limit of the azimuth transmitter signal on the right and left side of the MLS Bearing (Section 6.167).
+    /// The Back Azimuth Coverage Sector is identical to the Azimuth Coverage Sector and also provides guidance for Missed Approach Procedures and departures.
+    /// Must be less than 360 degrees; limited to 3 digits.
+    typedef xs::unsignedInt AzimuthCoverageSectorRightLeft;
+
+    /// The MLS Azimuth and Back Azimuth Proportional Angle fields define the limits of proportional guidance of the azimuth transmitter signal on the right and left side of the MLS Azimuth bearing (Section 6.167).
+    /// The BAZ is identical to the AZ and also provides guidance for Missed Approach Procedures and departures.
+    /// See figure under Section 6.172.
+    /// Must be less than 360 degrees; limited to 3 digits.
+    typedef xs::unsignedInt AzimuthProportionalAngleRightLeft;
+
+    /// The Beam Position” field defines the location of the facility antenna relative to one end of the runway or threshold.
+    /// Restricted to 4 digits.
+    typedef xs::unsignedInt BeamPosition;
 
     /// The “GNSS Channel Number” field identifies the channel to be used for a given approach.
     /// The “MLS Channel” field specifies the channel of the Azimuth, Elevationand Data transmissions for the MLS identified in the “MLS Identifier” field of the record.
@@ -86,6 +124,18 @@ namespace Arinc424
 
     /// Restricted to 4 digits, one fraction digit.
     typedef CompassValue BearingValue;
+
+    ///
+    class Bearing
+    {
+      public:
+        Bearing();
+        ~Bearing();
+
+      private:
+        BearingValue bearingValue;
+        xs::boolean isTrueBearing;
+    };
 
     /// “Outbound Magnetic Course” is the published outbound magnetic course from the waypoint identified in the record’s “Fix Ident” field.
     /// In addition, this field is used for Course/Heading/Radials on SID/STAR Approach Records through requirements of the Path Terminator and coding rules contained in Attachment 5 of this specification.
@@ -125,6 +175,11 @@ namespace Arinc424
     /// The “Core Identifier” field contains the character-name-code, or other series of characters, with which the object is identified.
     /// This includes Waypoint Identifiers, VHF NAVAID Identifiers, NDB NAVAID identifier, Airport Identifiers, Runway Identifiers, and other objects.
     typedef xs::string CoreIdentifier;
+
+    /// A standard cruising level table is established by ICAO and is to be observed except when, on the basis of regional air navigation agreements, a modified table of cruising levels is prescribed for use.
+    /// This field permits the enroute airway record to identify the Cruise Table record that is to be used for cruise levels.
+    /// Exactly 2 characters.
+    typedef xs::string CruiseTableIdentifier;
 
     /// The “Customer Area Code” field permits the categorization of standard records by geographical area and of tailored records by the airlines for whom they are provided in the master file.
     /// Several record types do not adhere to the established geographical boundaries.
@@ -170,11 +225,25 @@ namespace Arinc424
     /// Restricted to 4 digits and 1 fraction digit.
     typedef xs::decimal DistanceNM;
 
+    /// Restricted to 2 digits.
+    typedef DistanceNM DistanceNMTwoDigits;
+
+    /// The “Category Radii” fields, expressed in tenths of nautical miles, specifies the obstacle clearance area for aircraft maneuvering to land on a runway which is not aligned with the FAC of the approach procedure.
+    /// The limits of the circling area are defined to be an arc from the center of the end of each usable runway.
+    /// The extremities of the adjacent arcs are joined by lines drawn tangent to the arcs.
+    /// The area thus enclosed is the circling approach area.
+    typedef DistanceNMTwoDigits CategoryDistance;
+
     /// Limited to 4 digits
     typedef xs::unsignedInt DistanceIntegerNMFourDigits;
 
     /// Limited to 3 digits
     typedef DistanceIntegerNMFourDigits DistanceIntegerNM;
+
+    /// The Along Track Distance field used on Flight Planning Arrival/Departure Data Records is the total distance for a given transition, from the initial fix to the ending fix in the transition.
+    /// A single occurrence of a Flight Planning Arrival/Departure Data record can contain up to three Along Track Distance fields, one for each of the transition types that can make up a single terminal route in the Primary Record and up to four possible intermediate fix points in each Continuation Record.
+    /// Collectively, the values equal the along track distance from the first fix in the first transition to the last fix in the last transition.
+    typedef DistanceIntegerNM AlongTrackDistance;
 
     /// Limited to 2 digits
     typedef DistanceIntegerNM DistanceIntegerNMTwoDigits;
@@ -182,6 +251,10 @@ namespace Arinc424
     /// Elevation of the respective feature.
     /// Restricted to the range -1500 to 20000
     typedef xs::integer Elevation;
+
+    /// The “Elevation Angle Span” field defines the scan of the elevation transmitter signal between the lower and upper limits.
+    /// Must be less than 360 degrees; limited to 3 digits.
+    typedef xs::unsignedInt ElevationAngleSpan;
 
     /// The “Ellipsoidal Height” field is the height of a surveyed point in reference to the WGS-84 ellipsoid.
     typedef xs::decimal EllipsoidHeight;
@@ -192,6 +265,11 @@ namespace Arinc424
     /// The “Final Approach Segment Data CRC Remainder” field is an eight (8) character hexadecimal representation of the 32-bit CRC value provided by the source for the information contained in the aeronautical data fields being monitored for integrity.
     /// The value is calculated by a specific mathematical algorithm, which is both machine and man processible.
     typedef xs::string FinalApproachSegmentDataCRCRemainder;
+
+    /// The “Altitude” field used on Flight Planning Arrival/Departure Data Records is a simplification of the altitude concept used in the full procedure records.
+    /// It will provide an altitude indication in hundreds of feet, no AGL, MSL, FL etc indication provided.
+    /// Limited to 3 digits.
+    typedef xs::unsignedInt FlightPlanningAltitude;
 
     /// This field specifies frequency and unit of measure of the frequency information.
     class Frequency
@@ -207,6 +285,9 @@ namespace Arinc424
 
     /// The “Glide Path Angle” field is an angle, expressed in degrees, tenths and hundredths of degrees, measured at the Flight Path Control Point (FPCP) of those approach procedures that require the coding of a Airport or Helicopter Operations SBAS Path Point record or GBAS Path Point Record. It establishes the intended descent gradient for the final approach flight path. For an illustration of the GPA and related points.
     typedef xs::decimal GlidePathAngle;
+
+    /// The “Glide Slope Beam Width” field specifies the glide path beam width of the Glide Slope defined in the record.
+    typedef xs::decimal GlideslopeBeamWidth;
 
     /// The “High Precision Latitude” field contains the latitude of the navigation feature identified in the record.
     /// When used on Airport Path Point Records, one navigation feature is the LTP/FTP, the other is the FPAP.
@@ -260,7 +341,27 @@ namespace Arinc424
     ///
     typedef xs::string LegInboundIndicator;
 
+    /// The “Leg Type Code” field used on Flight Planning Arrival/Departure Data Records is a simplification of the Path Terminator concept.
+    /// It will provide the information on the path between intermediate waypoints as straight or curved and provide an indication of the change in direction of flight, expressed as left or right, at an intermediate waypoint.
+    class LegTypeCode : public Alpha
+    {
+      public:
+        LegTypeCode();
+        virtual ~LegTypeCode();
+
+      private:
+        Enum::LegTypeCodeSC legTypeCodeSC;
+        Enum::LegTypeTurnIndication legTypeTurnIndication;
+    };
+
     typedef xs::unsignedInt LongestRunway;
+
+    /// The Maximum Allowable Helicopter Weight represents the maximum weight, expressed in hundreds of pounds, that a helipad or FATO can support.
+    /// Limited to the range 0, 999.
+    typedef xs::integer MaxHelicopterWeight;
+
+    /// The “Minor Axis Bearing” field indicates the true bearing of the minor axis of marker beacons.
+    typedef BearingValue MinorAxisBearing;
 
     /// The “Name” field defines the name commonly applied to the navigation entity defined in the record.
     /// The field is restricted to a maximum of 50 characters.
@@ -268,6 +369,10 @@ namespace Arinc424
 
     ///
     typedef xs::string NotesText;
+
+    /// The Number of Engines Restriction field used on Flight Planning Arrival/Departure Data Records is derived from government source and is included whenever a given procedure, normally departure, is restricted to, or designed for, aircraft with a specific number of engines.
+    /// Exactly 4 characters.
+    typedef xs::string NumberOfEnginesRestriction;
 
     /// The “Orthometric Height” field is the height of a surveyed point in reference to Mean Sea Level (MSL).
     /// Restricted to the range -9999 to +9999.
@@ -279,6 +384,35 @@ namespace Arinc424
 
     /// This element provides a way to reference any child element of A424Point.
     typedef xs::string PointReference;
+
+    /// This type represents the details for a Common Segment.
+    class CommonSegmentDetails
+    {
+      public:
+        CommonSegmentDetails();
+        ~CommonSegmentDetails();
+
+      private:
+        AlongTrackDistance alongTrackDistance;
+        PointReference fix;
+    };
+
+    /// This type represents the details of an intermediate Fix
+    class IntermediateFixDetails
+    {
+      public:
+        IntermediateFixDetails();
+        ~IntermediateFixDetails();
+
+      private:
+        Enum::FixRelatedTransitionCode fixRelatedTransitionCode;
+        AlongTrackDistance intermediateDistance;
+        PointReference fix;
+    };
+
+    /// The “Glide Slope Angle” field defines the glide slope angle of an ILS facility/GLS approach. 
+    /// The “Minimum Elevation Angle” field defines the lowest elevation angle authorized for the MLS procedure.
+    typedef xs::decimal PrecisionApproachAngle;
 
     /// Contains minutes of a coordinate as an integer from 0 to 60.
     typedef xs::integer Minute;
@@ -361,6 +495,9 @@ namespace Arinc424
           MagneticVariationValue magneticVariationValue;
     };
 
+    /// The “Multiple Code” field will be used to indicate Restrictive Airspace Areas or MSA Centers having the same designator but subdivided or differently divided by lateral and/or vertical detail.
+    typedef unsigned char MultipleCode;
+
     ///
     typedef unsigned char MultipleIndicator;
 
@@ -376,6 +513,9 @@ namespace Arinc424
         Enum::FixType fixType;
         Enum::LocalizerMarkerIndicator localizerMarkerIndicator;
     };
+
+    /// The “Nominal Elevation Angle” field defines the normal glide path angle for the MLS installation.
+    typedef xs::unsignedInt NominalElevationAngle;
 
     ///
     class NdbNavaidClass
@@ -408,6 +548,10 @@ namespace Arinc424
         xs::boolean isCategoryE;
         xs::boolean isCategoryHelicopter;
     };
+
+    /// The “Procedure Description” field used on Flight Planning Arrival/Departure Data Records is the textual representation of the procedure name.
+    /// Limited to 15 characters.
+    typedef xs::string ProcedureDescription;
 
     /// This type provides the aircraft type(s) for which the procedure or portion of a procedure (transition) was designed.
     class ProcedureDesignAircraftTypes
@@ -566,12 +710,28 @@ namespace Arinc424
     /// Limited to 60 characters.
     typedef xs::string SectorizationNarrative;
 
+    /// This type represents the details for a segment.
+    class SegmentDetails
+    {
+      public:
+        SegmentDetails();
+        ~SegmentDetails();
+
+      private:
+        CoreIdentifier transitionIdentifier;
+        AlongTrackDistance alongTrackDistance;
+        PointReference fix;
+    };
+
     /// For Route Type Records - A route of flight is defined by a series of records taken in order.
     /// The “Sequence Number” field defines the location of the record in the sequence defining the route of flight identified in the route identifier field.
     /// For Boundary Type Records - A boundary is defined by a series of records taken in order.
     /// The “Sequence Number” field defines the location of the record in the sequence defining a boundary. For Record Types requiring more than one primary record to define the complete content – In a series of records used to define a complete condition, the “Sequence Number” is used to define each primary record in the sequence. For Airport and Heliport TAA Records – Sequence Number 1 will always be assigned to the record based on the Center Fix upon which the Straight-In Area is predicated, Sequence Number 2 will always be assigned to the record based on the Center Fix upon which the Left Base Area is predicated, and Sequence Number 3 will always be assigned to the record based on the Center Fix upon which the Right Base Area is predicated. Therefore, if a TAA Record has a Straight-In Area and a Right Base Area, but no Left Base Area, only Sequence Numbers 1 and 3 will be used. If a TAA Record has a Straight-In Area and a Left Base Area but no Right Base Area, only Sequence Numbers 1 and 2 will be used.
     /// Restricted to 4 digits.
     typedef xs::unsignedInt SequenceNumber;
+
+    /// The service volume radius identifies the radius of the service volume around the transmitter in Nautical miles.
+    typedef DistanceIntegerNMTwoDigits ServiceVolumeRadius;
 
     /// The Speed Limit field defines a speed, expressed in Knots, Indicated (K.I.A.S.), for a fix in a terminal procedure or for an airport or heliport terminal environment.
     /// Restricted to less than 1000.
@@ -614,6 +774,35 @@ namespace Arinc424
         /// If used, there should be no timezone set in the "time" field.
         Enum::RelativeTimeIndicator relativeTimeIndicator;
     };
+
+    /// For VHF NAVAIDS, the “Station Declination” field contains the angular difference between true north and the zero degree radial of the NAVAID at the time the NAVAID was last site checked.
+    /// For ILS localizers, the field contains the angular difference between true north and magnetic north at the localizer antenna site at the time the magnetic bearing of the localizer course was established.
+    class StationDeclination
+    {
+      public:
+        StationDeclination();
+        ~StationDeclination();
+
+      private:
+        Enum::StationDeclinationEWT stationDeclinationEWT;
+        MagneticVariationValue stationDeclinationValue;
+    };
+
+    /// This field identifies the WGS84 elevation of the GLS ground station described in the record.
+    typedef Elevation StationElevationWGS84;
+
+    /// The station type identifies the type of the differential ground station.
+    /// The first character will be L for LAAS/GLS ground station, C for SCAT-1 station.
+    /// The second and third character will be blank for the moment.
+    /// They will indicate the interoperability standard to which the station conforms.
+    /// Limited to 3 characters.
+    typedef xs::string StationType;
+
+    /// The TDMA identifies the time slot(s) in which the ground station transmits the related approach.
+    /// The high precision time source available through GPS permits utilization of Time division multiplexing or TDMA (Time Division Multiple Access), allowing multiple ground stations to share a common frequency by dividing it into eight time slots.
+    /// An individual station may broadcast in one or more of eight slots.
+    /// Exactly 2 characters.
+    typedef xs::string TDMASlots;
 
     /// “Theta” is defined as the magnetic bearing to the waypoint identified in the record’s “FIX Ident” field from the Navaid in the “Recommended Navaid” field.
     typedef BearingValue Theta;
@@ -686,6 +875,11 @@ namespace Arinc424
     /// Aircraft descending through the transition layer will use altimeters set to local station pressure, while departing aircraft climbing through the layer will be using standard altimeter setting (QNE) of 29.92 inches of mercury, 1013.2 millibars or 1013.2 hectopascals.
     /// Restricted to a total of 5 digits.
     typedef AltitudeValue TransitionAltitude;
+
+    /// The “Magnetic Bearing” for ILS localizer, MLS Azimuth, MLS Back Azimuth and Runway records is given in the primary record.
+    /// This field allows the true bearing to be entered independently of the magnetic variation.
+    /// Restricted to 5 digits and 2 decimals.
+    typedef CompassValue TrueBearing;
 
     typedef xs::string Vectoring;
 

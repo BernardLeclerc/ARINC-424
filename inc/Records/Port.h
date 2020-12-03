@@ -1,7 +1,10 @@
 #pragma once
 
+#include "AirportHeliportLocalizerMarker.h"
 #include "BasicClasses.h"
 #include "Communication.h"
+#include "FlightPlanning.h"
+#include "MSA.h"
 #include "Navaids.h"
 #include "SIDSTARApproach.h"
 #include "TAA.h"
@@ -26,6 +29,21 @@ namespace Arinc424
         std::list<SID> sid;
         std::list<STAR> star;
         std::list<Approach> approach;
+    };
+
+    class Helipad : public A424Point
+    {
+      public:
+        Helipad();
+        virtual ~Helipad();
+
+      private:
+        xs::integer padDimensionX;
+        xs::integer padDimensionY;
+        xs::integer padRadius;
+        Enum::HelipadShape helipadShape;
+        Type::MaxHelicopterWeight maximumHelicopterWeight;
+        Enum::HelicopterPerformanceReq helicopterPerformanceReq;
     };
 
     class Port : public A424Point
