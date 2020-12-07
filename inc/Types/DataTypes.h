@@ -248,6 +248,9 @@ namespace Arinc424
     /// Limited to 2 digits
     typedef DistanceIntegerNM DistanceIntegerNMTwoDigits;
 
+    /// The distance from the extremity of a runway to a threshold not located at that extremity of that runway, in feet.
+    typedef DistanceFeet DisplacedThresholdDistance;
+
     /// Elevation of the respective feature.
     /// Restricted to the range -1500 to 20000
     typedef xs::integer Elevation;

@@ -2,6 +2,8 @@
 using namespace Arinc424;
 using std::string;
 
+#include "Records/Port.h"
+
 #include <iostream>
 using std::istream;
 using std::ostream;
@@ -289,7 +291,10 @@ namespace Arinc424
   /// PA records
   bool File::processAirportRecord(const string &record)
   {
-    log(Error) << "Method '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
+    //Record::Airport *airport = new Record::Airport;
+
+    //log(Error) << "Method '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
+
     return false;
   }
 

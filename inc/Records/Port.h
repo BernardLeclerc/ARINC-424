@@ -80,7 +80,17 @@ namespace Arinc424
         Type::MaxHelicopterWeight maxHelicopterWeight;
     };
 
-    class Runway;
+    /// This following record contains the fields used in Runway Records
+    class Runway : public A424Point
+    {
+      public:
+        Runway();
+        virtual ~Runway();
+
+      private:
+        Type::DisplacedThresholdDistance displacedThresholdDistance;
+    };
+
     class AirportGate;
 
     class Airport : public Port

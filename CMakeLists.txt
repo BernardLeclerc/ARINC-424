@@ -20,6 +20,7 @@ add_library(
   inc/Types/DataTypes.h    src/Types/DataTypes.cpp
   inc/Types/Enumerations.h
 
+  inc/Records/AeroPublication.h src/Records/AeroPublication.cpp
   inc/Records/BasicClasses.h
   inc/Records/Legs.h
   inc/Records/Navaids.h

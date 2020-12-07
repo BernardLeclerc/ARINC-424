@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Header.h"
+#include "Records/AeroPublication.h"
 
 #include <istream>
 #include <ostream>
@@ -146,6 +147,9 @@ namespace Arinc424
 
       // All files have a header
       Header header;
+
+      /// This is the actual data once read from the source stream.
+      Record::AeroPublication aeroPublication;
   };
 
   /// This extraction operator reads an ARINC-424 file from a standard input stream,
