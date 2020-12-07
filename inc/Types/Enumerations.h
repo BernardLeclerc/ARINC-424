@@ -568,6 +568,14 @@ namespace Arinc424
       CollocatedGlideSlope  ///< Collocated with Glide Slope
     };
 
+    /// Difference between Runway Landing Threshold Elevation (A424 PG 5.68) and runway landing threshold elevation measured with an independent means is 5 meters or less.
+    enum class LandingThresholdElevationAccuracyCompliance
+    {
+      Compliant,
+      NotCompliant,
+      NotEvaluated
+    };
+
     /// The Leg Inbound/Outbound Indicator is used to identify the Leg Length or Leg Time field values (5.64 or 5.65) as being applicable to either the inbound or the outbound leg of a holding pattern or race track course reversal.
     enum class LegInboundOutboundIndicator
     {
@@ -895,12 +903,33 @@ namespace Arinc424
       PbnUnspecified
     };
 
+    /// Accuracy of Runway Length (A424 PG 5.57) is 5 meters (compared to measured length of runway surface - stopways, aligned taxiways and starter extensions excluded, as per A424 runway length definition).
+    /// Accuracy of Runway Threshold Position (A424 PG 5.36 and 5.37) is 5 meters (compared to measured runway landing threshold location).
+    /// Accuracy of Runway Threshold Displacement Distance (A424 PG 5.69) is 5 meters (compared to measured length of displaced area).
+    /// Accuracy of Runway Magnetic Bearing (A424 PG 5.58) and Airport Magnetic Variation (A424 PA 5.39) is such that the runway true bearing accuracy is 0.5 degree (NDB Magnetic Runway Bearing will be converted in runway true bearing using NDB Airport Magnetic Variation, then will be validated by comparison with measured True Bearing of runway).
+    enum class RunwayAccuracyCompliance
+    {
+      Compliant,
+      NotCompliant,
+      NotEvaluated
+    };
+
     /// Runway Left/Right/Centre Indicator
     enum class RunwayLeftRightCenterType
     {
       Left,
       Right,
       Center
+    };
+
+    /// The Runway Usage Indicator field specifies if a Runway is usable for take-off, landing, or both operations.
+    /// A value of LandingOnly will require the TORA, TODA, and ASDA to be 0 and the LDA either blank or non-0.
+    /// A field content of TakeoffOnly will require the TORA, TODA, and ASDA to be blank or non-0 and the LDA to be 0.
+    enum class RunwayUsageIndicator
+    {
+      LandingOnly,
+      TakeoffOnly,
+      TakeoffAndLanding
     };
 
     /// The “Operation Type” field indicates whether the operation is an approach procedure, an advanced operation or other operational to be defined later.
@@ -1003,6 +1032,45 @@ namespace Arinc424
       Grid
     };
 
+    /// The Surface Type field defines the predominant surface type of the runway/helipad described in the record
+    enum class SurfaceType
+    {
+      Asphalt,
+      AsphaltAndGrass,
+      BituminousTarOrAsphalt, ///< Bituminous tar or asphalt and/or oil or bitumen bound, mix-in-place surfaces (often refered to as “earth cement”)
+      BrickisLaidOrMortared,
+      Clay,
+      Concrete,
+      ConcreteAndAsphalt,
+      ConcreteAndGrass,
+      Coral,
+      Dirt,
+      Grass,
+      Gravel,
+      Ice,
+      Laterite,
+      Macadam,
+      LandingMat,             ///< Usually made of aluminium
+      ProtectiveLaminate,     ///< Usually made of rubber
+      Metal,                  ///< Steel or Aluminium
+      Mix,                    ///< Non bituminous mix
+      Other,
+      Paved,                  ///< Generic hard surface
+      PiercedSteelPlanking,
+      Sand,
+      Sealed,
+      Silt,
+      Snow,
+      Soil,
+      Stone,
+      Tarmac,
+      Treated,
+      Turf,
+      Unknown,
+      Unpaved,
+      Water
+    };
+
     /// The Fix Position Indicator field contains an indication as to which TAA Initial Approach Fix (IAF) the data in the record applies.
     enum class TAASectorIdentifier
     {
@@ -1016,6 +1084,23 @@ namespace Arinc424
     {
       Feet,
       Meters
+    };
+
+    /// The “TCH Value Indicator” field will define which TCH value is provided in the runway record.
+    enum class TCHValueIndicator
+    {
+      TchOfElectronicGlideSlope,  ///< TCH provided in Runway Record is that of the electronic Glide Slope.
+      TchRnavToRunway,            ///< TCH provided in Runway Record is that of an RNAV procedure to the runway.
+      TchVgsi,                    ///< TCH provided in the Runway Record is that of the VGSI for the runway.
+      TchDefaulted                ///< TCH provided in the Runway Record is the default value of 40 or 50 feet (See Section 5.67).
+    };
+
+    /// The content of the “TDZE Location” field indicates whether the TDZ elevation was obtained from official government sources or from other sources.
+    enum class TDZELocation
+    {
+      Official,
+      LandingThreshold,
+      AirportElevation
     };
 
     /// “Time Code” is used in a Time of Operations Record to indicate how to interpret the other fields in Time of Operations records.

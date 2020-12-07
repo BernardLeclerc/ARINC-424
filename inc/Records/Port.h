@@ -89,6 +89,43 @@ namespace Arinc424
 
       private:
         Type::DisplacedThresholdDistance displacedThresholdDistance;
+        Type::Elevation landingThresholdElevation;
+        Type::EllipsoidHeight ltpEllipsoidHeight;
+        Type::PrecisionApproachNavaidReference primaryApproachNavaidReference;
+        Type::Bearing runwayBearing;
+        Type::TrueBearing runwayTrueBearing;
+        Enum::TrueBearingSource runwayTrueBearingSource;
+        Type::RunwayDescription runwayDescription;
+        Type::RunwayGradient runwayGradient;
+        Type::RunwayIdentifier runwayIdentifier;
+        Type::RunwayLength runwayLength;
+        Type::RunwayWidth runwayWidth;
+        Type::PrecisionApproachNavaidReference secondaryApproachNavaidReference;
+        Type::StopWay stopway;
+        Enum::TCHValueIndicator tchValueIndicator;
+        Enum::TDZELocation tdzeLocation;
+        Type::ThresholdCrossingHeight thresholdCrossingHeight;
+        Type::TouchDownZoneElevation touchDownZoneElevation;
+        Enum::SurfaceType surfaceType;
+        Type::MaxHelicopterWeight maximumHelicopterWeight;
+        Enum::HelicopterPerformanceReq helicopterPerformanceReq;
+        Type::DistanceFeetFiveDigits takeOffRunwayAvailable;
+        Type::DistanceFeetFiveDigits takeOffDistanceAvailable;
+        Type::DistanceFeetFiveDigits accelerateStopDistanceAvailable;
+        Type::DistanceFeetFiveDigits landingDistanceAvailable;
+        Enum::RunwayUsageIndicator runwayUsageIndicator;
+
+        /// This element indicates runway data elements meet runway accuracy requirements by confirming they are consistent with a trustworthy independent data source.
+        class RunwayAccuracy
+        {
+          public:
+            RunwayAccuracy();
+            ~RunwayAccuracy();
+
+          private:
+            Enum::RunwayAccuracyCompliance runwayAccuracyCompliance;
+            Enum::LandingThresholdElevationAccuracyCompliance landingThresholdElevationAccuracyCompliance;
+        };
     };
 
     class AirportGate;

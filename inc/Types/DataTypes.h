@@ -417,6 +417,19 @@ namespace Arinc424
     /// The “Minimum Elevation Angle” field defines the lowest elevation angle authorized for the MLS procedure.
     typedef xs::decimal PrecisionApproachAngle;
 
+    /// Element which encapsulates the localizer details for the corresponding Runway.
+    /// This element contains the localizer ident and localizer class.
+    class PrecisionApproachNavaidReference
+    {
+      public:
+        PrecisionApproachNavaidReference();
+        ~PrecisionApproachNavaidReference();
+
+      private:
+        Enum::PrecisionApproachCategory approachCategory;
+        Type::PointReference navaidReference;
+    };
+
     /// Contains minutes of a coordinate as an integer from 0 to 60.
     typedef xs::integer Minute;
 
@@ -655,6 +668,15 @@ namespace Arinc424
         xs::boolean isConventional;
     };
 
+    /// If required, additional information concerning a runway can be included in a record in the “Runway Description” field.
+    /// Limited to 22 characters.
+    typedef xs::string RunwayDescription;
+
+    /// The Runway Gradient field indicates an overall gradient in percent, measured from the start of take-off roll end of the runway designated in the record.
+    /// The gradient is expressed as a positive or negative gradient; positive being an upward and negative being a downward gradient.
+    /// Limited to the range [-9.0, 9.0]
+    typedef xs::decimal RunwayGradient;
+
     /// The “RunwayNumber” field identifies the runways described in runway records and runways served by the ILS/MLS described in ILS/MLS records. The runway Number is only part of the Runway Identifier.
     /// Limited to the range of 1 to 36.
     typedef xs::unsignedInt RunwayNumber;
@@ -671,6 +693,9 @@ namespace Arinc424
         Type::RunwayNumber runwayNumber;
     };
 
+    /// The “Runway Length” field defines the total length of the runway surface declared suitable and available for ground operations of aircraft for the runway identified in the records’ Runway Identifier field, in feet.
+    typedef DistanceFeetFiveDigits RunwayLength;
+
     /// This XML element is designed as an abstraction for Runway Identifier or Pad Identifier, this is done by using the XML attribute "choice", so that only one of the elements can be present in the XML file.
     class RunwayOrPadIdentifier
     {
@@ -682,6 +707,10 @@ namespace Arinc424
         CoreIdentifier padIdentifier;
         RunwayIdentifier runwayIdentifier;
     };
+
+    /// The width of the runway identified in the “Runway Identifier” field is specified in the “Runway Width” field.
+    /// Limited to 3 digits.
+    typedef xs::unsignedInt RunwayWidth;
 
     /// When used on MSA Records, the “Sector Bearing” contains beginning and ending bearing values, referenced to the MSA Center, for each sector of the MSA.
     /// When used on TAA records, the “Sector Bearing” contains the beginning and ending bearings that define a TAA Area and are referenced to the TAA Initial Approach Fix (IAF) Waypoint.
@@ -801,6 +830,9 @@ namespace Arinc424
     /// Limited to 3 characters.
     typedef xs::string StationType;
 
+    /// “Stopway” means the length of an area beyond the take-off runway, no less wide than the runway and centered upon the extended centerline of the runway, and designated for use in decelerating the airplane during an aborted takeoff.
+    typedef DistanceFeet StopWay;
+
     /// The TDMA identifies the time slot(s) in which the ground station transmits the related approach.
     /// The high precision time source available through GPS permits utilization of Time division multiplexing or TDMA (Time Division Multiple Access), allowing multiple ground stations to share a common frequency by dividing it into eight time slots.
     /// An individual station may broadcast in one or more of eight slots.
@@ -872,6 +904,9 @@ namespace Arinc424
         xs::integer hourOffset; ///< From -14 to +12
         xs::integer minuteOffset;
     };
+
+    /// The “Touchdown Zone Elevation” is the highest elevation in the first 3,000 feet of the landing surface beginning at the threshold.
+    typedef xs::integer TouchDownZoneElevation;
 
     /// The “Transition Altitude” field defines the altitude in the vicinity of an airport or heliport at or below which the vertical position of an aircraft is controlled by reference to altitudes (MSL).
     /// The “Transition Level” field defines the lowest flight level available for use above the transition altitude.
