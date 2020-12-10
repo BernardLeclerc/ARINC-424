@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BasicClasses.h"
 #include "Types/DataTypes.h"
 #include "Types/Enumerations.h"
 #include "xs.h"

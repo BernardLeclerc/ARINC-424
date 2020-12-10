@@ -68,6 +68,9 @@ Longitude::~Longitude() {}
 MagneticVariation::MagneticVariation() {}
 MagneticVariation::~MagneticVariation() {}
 
+NameFormatIndicator::NameFormatIndicator() {}
+NameFormatIndicator::~NameFormatIndicator() {}
+
 NdbNavaidClass::NdbNavaidClass() {}
 NdbNavaidClass::~NdbNavaidClass() {}
 
@@ -86,8 +89,14 @@ ProcedureWaypointDescription::~ProcedureWaypointDescription() {}
 RNPLOS::RNPLOS() {}
 RNPLOS::~RNPLOS() {}
 
+RouteQualifications::RouteQualifications() {}
+RouteQualifications::~RouteQualifications() {}
+
 RunwayIdentifier::RunwayIdentifier() {}
 RunwayIdentifier::~RunwayIdentifier() {}
+
+RunwayOrPadIdentifier::RunwayOrPadIdentifier() {}
+RunwayOrPadIdentifier::~RunwayOrPadIdentifier() {}
 
 Sector::Sector() {}
 Sector::~Sector() {}
@@ -112,3 +121,9 @@ TimeOfOperationInterval::~TimeOfOperationInterval() {}
 
 TimeZone::TimeZone() {}
 TimeZone::~TimeZone() {}
+
+WaypointType::WaypointType() {}
+WaypointType::~WaypointType() {}
+
+WaypointUsage::WaypointUsage() {}
+WaypointUsage::~WaypointUsage() {}

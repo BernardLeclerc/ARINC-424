@@ -21,21 +21,21 @@ add_library(
   inc/Types/Enumerations.h
 
   inc/Records/AeroPublication.h                 src/Records/AeroPublication.cpp
-  inc/Records/AirportGate.h
-  inc/Records/AirportHeliportLocalizerMarker.h
+  inc/Records/AirportGate.h                     src/Records/AirportGate.cpp
+  inc/Records/AirportHeliportLocalizerMarker.h  src/Records/AirportHeliportLocalizerMarker.cpp
   inc/Records/BasicClasses.h                    src/Records/BasicClasses.cpp
-  inc/Records/Communication.h
+  inc/Records/Communication.h                   src/Records/Communication.cpp
   inc/Records/FlightPlanning.h                  src/Records/FlightPlanning.cpp
-  inc/Records/Legs.h
+  inc/Records/Legs.h                            src/Records/Legs.cpp
   inc/Records/MetaData.h                        src/Records/MetaData.cpp
-  inc/Records/MSA.h
+  inc/Records/MSA.h                             src/Records/MSA.cpp
   inc/Records/Navaids.h                         src/Records/Navaids.cpp
-  inc/Records/PathPoint.h
+  inc/Records/PathPoint.h                       src/Records/PathPoint.cpp
   inc/Records/Ports.h                           src/Records/Ports.cpp
   inc/Records/Route.h                           src/Records/Route.cpp
   inc/Records/SIDSTARApproach.h                 src/Records/SIDSTARApproach.cpp
-  inc/Records/TAA.h
-  inc/Records/Waypoint.h
+  inc/Records/TAA.h                             src/Records/TAA.cpp
+  inc/Records/Waypoint.h                        src/Records/Waypoint.cpp
 )
 
 target_include_directories(
