@@ -551,6 +551,15 @@ namespace Arinc424
       SquareAndOrRectangle
     };
 
+    /// This field provides information on the type of heliport facility.
+    enum class HeliportType
+    {
+      NotProvided,
+      Hospital,
+      OilRig,
+      Other
+    };
+
     /// The Facility Characteristics field identifies the characteristics of the NAVAID facility.
     enum class ILSBackCourse
     {

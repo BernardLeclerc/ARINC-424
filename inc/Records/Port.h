@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AirportGate.h"
 #include "AirportHeliportLocalizerMarker.h"
 #include "BasicClasses.h"
 #include "Communication.h"
@@ -128,8 +129,6 @@ namespace Arinc424
         };
     };
 
-    class AirportGate;
-
     class Airport : public Port
     {
       public:
@@ -143,6 +142,18 @@ namespace Arinc424
         Enum::LongestRunwaySurfaceCode longestRunwaySurfaceCode;
         std::list<Runway>              runways;
         std::list<AirportGate>         airportGates;
+    };
+
+    /// This following record contains the fields used in Heliport Record
+    class Heliport : public Port
+    {
+      public:
+        Heliport();
+        virtual ~Heliport();
+
+      private:
+        ///This element provies information as to what type of heliport the facility is.
+        Enum::HeliportType heliportType;
     };
   } // namespace Record
 } // namespace Arinc424

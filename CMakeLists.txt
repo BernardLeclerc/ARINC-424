@@ -21,13 +21,20 @@ add_library(
   inc/Types/Enumerations.h
 
   inc/Records/AeroPublication.h src/Records/AeroPublication.cpp
+  inc/Records/AirportGate.h
+  inc/Records/AirportHeliportLocalizerMarker.h
   inc/Records/BasicClasses.h
+  inc/Records/Communication.h
+  inc/Records/FlightPlanning.h
   inc/Records/Legs.h
+  inc/Records/MSA.h
   inc/Records/Navaids.h
   inc/Records/PathPoint.h
   inc/Records/Port.h
   inc/Records/Route.h
   inc/Records/SIDSTARApproach.h
+  inc/Records/TAA.h
+  inc/Records/Waypoint.h
 )
 
 target_include_directories(
