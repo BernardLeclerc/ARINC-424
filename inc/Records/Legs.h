@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../Types/DataTypes.h"
-#include "../Types/Enumerations.h"
-
-#include "../xs.h"
+#include "Types/DataTypes.h"
+#include "Types/Enumerations.h"
+#include "xs.h"
 
 namespace Arinc424
 {

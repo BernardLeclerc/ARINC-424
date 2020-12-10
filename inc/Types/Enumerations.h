@@ -1160,5 +1160,5 @@ namespace Arinc424
       type1020
     };
 
-  } // namespace Enum
-} // namespace Arinc424
+  }
+}

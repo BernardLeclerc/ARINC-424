@@ -13,24 +13,25 @@ add_library(
 
   inc/Arinc424.h
 
-  inc/File.h   src/File.cpp
-  inc/Header.h src/Header.cpp
-  inc/Reader.h src/Reader.cpp
+  inc/File.h                                    src/File.cpp
+  inc/Header.h                                  src/Header.cpp
+  inc/Reader.h                                  src/Reader.cpp
 
-  inc/Types/DataTypes.h    src/Types/DataTypes.cpp
+  inc/Types/DataTypes.h                         src/Types/DataTypes.cpp
   inc/Types/Enumerations.h
 
-  inc/Records/AeroPublication.h src/Records/AeroPublication.cpp
+  inc/Records/AeroPublication.h                 src/Records/AeroPublication.cpp
   inc/Records/AirportGate.h
   inc/Records/AirportHeliportLocalizerMarker.h
   inc/Records/BasicClasses.h
   inc/Records/Communication.h
   inc/Records/FlightPlanning.h
   inc/Records/Legs.h
+  inc/Records/MetaData.h                        src/Records/MetaData.cpp
   inc/Records/MSA.h
   inc/Records/Navaids.h
   inc/Records/PathPoint.h
-  inc/Records/Port.h
+  inc/Records/Ports.h
   inc/Records/Route.h
   inc/Records/SIDSTARApproach.h
   inc/Records/TAA.h
@@ -41,6 +42,10 @@ target_include_directories(
   Arinc424 PUBLIC inc
 )
 
+target_include_directories(
+  Arinc424 PRIVATE inc
+)
+
 add_executable(HelloWorld samples/HelloWorld.cpp)
 target_link_libraries(HelloWorld Arinc424)
 
@@ -49,9 +54,9 @@ target_link_libraries(Example_01 Arinc424)
 
 add_executable(
   TestSuite
-  test/TestSuite.cpp
-  test/TestReader.cpp
   test/TestFile.cpp
+  test/TestReader.cpp
+  test/TestSuite.cpp
   )
 target_link_libraries(
   TestSuite

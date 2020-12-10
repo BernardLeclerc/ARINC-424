@@ -31,4 +31,19 @@ namespace xs
   ///   09:45:00+04:00
   typedef std::string time;
 
-} // namespace xs
+  /// Format: YYYY-MM-DDThh:mm:ss
+  /// Examples:
+  ///   2002-05-30T09:00:00
+  ///   2002-05-30T09:30:10.5
+  ///   2002-05-30T09:30:10Z
+  ///   2002-05-30T09:30:10-06:00
+  ///   2002-05-30T09:30:10+06:00
+  typedef std::string dateTime;
+
+  ///
+  typedef string token;
+
+  ///
+  typedef token language;
+
+}

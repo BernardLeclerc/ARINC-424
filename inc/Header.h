@@ -33,4 +33,4 @@ namespace Arinc424
 
       std::list<std::string> additionalRecords;
   };
-} // namespace Arinc424
+}

@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../Types/DataTypes.h"
-#include "../xs.h"
-
+#include "Types/DataTypes.h"
+#include "xs.h"
 #include <list>
 
 namespace Arinc424
@@ -64,5 +63,5 @@ namespace Arinc424
         xs::IDREF firRef;
         xs::ID referenceID;
     };
-  } // namespace Record
-} // namespace Arinc424
+  }
+}

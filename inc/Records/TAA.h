@@ -1,9 +1,7 @@
 #pragma once
 
 #include "BasicClasses.h"
-
-#include "../xs.h"
-
+#include "xs.h"
 #include <list>
 
 namespace Arinc424

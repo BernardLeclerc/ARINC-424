@@ -1,8 +1,8 @@
 #pragma once
 
 #include "BasicClasses.h"
-#include "../Types/DataTypes.h"
-#include "../Types/Enumerations.h"
+#include "Types/DataTypes.h"
+#include "Types/Enumerations.h"
 
 namespace Arinc424
 {

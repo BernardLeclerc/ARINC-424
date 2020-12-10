@@ -164,5 +164,4 @@ namespace Arinc424
   std::ostream &operator<<(std::ostream &os, File &file);
 
   std::ostream &operator<<(std::ostream &os, File::LogCodes code);
-
-} // namespace Arinc424
+}

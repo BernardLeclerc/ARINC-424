@@ -36,4 +36,4 @@ namespace Arinc424
     private:
       File file;
   };
-} // namespace Arinc424
+}

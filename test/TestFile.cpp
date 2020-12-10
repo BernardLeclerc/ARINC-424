@@ -62,4 +62,4 @@ namespace Arinc424TestSuite
     EXPECT_EQ(0, file.getNumIncorrectRecords());
     EXPECT_EQ(File::Format::FixedLengthFormat, file.getInputFormat());
   }
-} // namespace Arinc424TestSuite
+}

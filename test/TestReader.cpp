@@ -48,4 +48,4 @@ namespace Arinc424TestSuite
     ASSERT_TRUE(file.empty());
     ASSERT_FALSE(file.ok());
   }
-} // namespace Arinc424TestSuite
+}

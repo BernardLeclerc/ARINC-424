@@ -4,9 +4,7 @@
 #include "Route.h"
 #include "Legs.h"
 #include "PathPoint.h"
-
-#include "../xs.h"
-
+#include "xs.h"
 #include <list>
 
 namespace Arinc424

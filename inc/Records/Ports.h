@@ -10,10 +10,8 @@
 #include "SIDSTARApproach.h"
 #include "TAA.h"
 #include "Waypoint.h"
-
-#include "../Types/DataTypes.h"
-#include "../Types/Enumerations.h"
-
+#include "Types/DataTypes.h"
+#include "Types/Enumerations.h"
 #include <list>
 
 namespace Arinc424
@@ -155,5 +153,5 @@ namespace Arinc424
         ///This element provies information as to what type of heliport the facility is.
         Enum::HeliportType heliportType;
     };
-  } // namespace Record
-} // namespace Arinc424
+  }
+}

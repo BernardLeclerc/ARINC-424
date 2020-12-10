@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MetaData.h"
 #include "Ports.h"
 #include <list>
 
@@ -15,6 +16,7 @@ namespace Arinc424
 
       private:
         std::list<Airport> airports;
+        MetaData metaData;
     };
-  } // namespace Record
-} // namespace Arinc424
+  }
+}

@@ -919,6 +919,13 @@ namespace Arinc424
     /// Restricted to 5 digits and 2 decimals.
     typedef CompassValue TrueBearing;
 
+    /// A Universally Unique Identifier (UUID) consists of 32 hexadecimal digits, displayed in 5 groups separated by hyphens, in the form 8-4-4-4-12 for a total of 36 characters (32 digits and 4 hyphens).
+    /// For example: 550e8400-e29b-41d4-a716-446655440000.
+    /// See RFC 4122 for further details
+    /// Pattern: [0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
+    /// Length: 36
+    typedef xs::string UUID;
+
     typedef xs::string Vectoring;
 
     /// The Vertical Alert Limit (VAL) is half the length of a segment on the vertical axis (perpendicular to the horizontal plane of WGS-84 ellipsoid), with its center being at the true position, which describes the region which is required to contain the indicated vertical position with a probability of 1-10-7 per approach, assuming the probability of a GPS satellite integrity failure being included in the position solution is less than or equal to 10-4 per hour.
@@ -998,5 +1005,5 @@ namespace Arinc424
         xs::boolean isTerminal;
     };
 
-  } // namespace Type
-} // namespace Arinc424
+  }
+}

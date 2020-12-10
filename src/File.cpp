@@ -1,8 +1,9 @@
 #include "File.h"
-using namespace Arinc424;
-using std::string;
-
 #include "Records/Ports.h"
+using namespace Arinc424;
+
+#include <cctype>
+using std::isdigit;
 
 #include <iostream>
 using std::istream;
@@ -13,8 +14,8 @@ using std::endl;
 #include <sstream>
 using std::istringstream;
 
-#include <cctype>
-using std::isdigit;
+#include <string>
+using std::string;
 
 namespace
 {
@@ -57,7 +58,8 @@ namespace
     clog << "Function '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
     return false;
   }
-} // namespace
+}
+
 namespace Arinc424
 {
   File::File()
@@ -426,4 +428,4 @@ namespace Arinc424
     return valid;
   }
 
-} // namespace Arinc424
+}
