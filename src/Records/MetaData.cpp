@@ -1,5 +1,4 @@
 #include "Records/MetaData.h"
-
 using namespace Arinc424::Record;
 
 MetaData::MetaData()

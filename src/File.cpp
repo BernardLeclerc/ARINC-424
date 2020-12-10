@@ -293,10 +293,16 @@ namespace Arinc424
   /// PA records
   bool File::processAirportRecord(const string &record)
   {
-    //Record::Airport *airport = new Record::Airport;
+    Record::Airport *airport = new Record::Airport;
 
-    //log(Error) << "Method '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
+    if (airport == nullptr)
+    {
+      log(Error) << "Can't allocate new Airport record" << endl;
+      return false;
+    }
 
+    log(Error) << "Method '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
+    delete airport;
     return false;
   }
 

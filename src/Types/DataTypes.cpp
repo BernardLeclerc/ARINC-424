@@ -2,6 +2,9 @@
 
 using namespace Arinc424::Type;
 
+Alpha::Alpha() {}
+Alpha::~Alpha() {}
+
 Altitude::Altitude()
     : isNotDefined(true),
       isUnknown(false),
@@ -25,5 +28,33 @@ AltitudeLimit::AltitudeLimit()
 }
 
 AltitudeLimit::~AltitudeLimit()
+{
+}
+
+CustAreaCode::CustAreaCode() {}
+CustAreaCode::~CustAreaCode() {}
+
+Latitude::Latitude() {}
+Latitude::~Latitude() {}
+
+Location::Location() {}
+Location::~Location() {}
+
+Longitude::Longitude() {}
+Longitude::~Longitude() {}
+
+MagneticVariation::MagneticVariation()
+{
+}
+
+MagneticVariation::~MagneticVariation()
+{
+}
+
+TimeZone::TimeZone()
+{
+}
+
+TimeZone::~TimeZone()
 {
 }

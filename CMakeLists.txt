@@ -23,15 +23,15 @@ add_library(
   inc/Records/AeroPublication.h                 src/Records/AeroPublication.cpp
   inc/Records/AirportGate.h
   inc/Records/AirportHeliportLocalizerMarker.h
-  inc/Records/BasicClasses.h
+  inc/Records/BasicClasses.h                    src/Records/BasicClasses.cpp
   inc/Records/Communication.h
-  inc/Records/FlightPlanning.h
+  inc/Records/FlightPlanning.h                  src/Records/FlightPlanning.cpp
   inc/Records/Legs.h
   inc/Records/MetaData.h                        src/Records/MetaData.cpp
   inc/Records/MSA.h
   inc/Records/Navaids.h
   inc/Records/PathPoint.h
-  inc/Records/Ports.h
+  inc/Records/Ports.h                           src/Records/Ports.cpp
   inc/Records/Route.h
   inc/Records/SIDSTARApproach.h
   inc/Records/TAA.h
