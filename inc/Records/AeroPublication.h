@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Ports.h"
+#include <list>
+
 namespace Arinc424
 {
   namespace Record
@@ -11,7 +14,7 @@ namespace Arinc424
         ~AeroPublication();
 
       private:
-        int i;
+        std::list<Airport> airports;
     };
   } // namespace Record
 } // namespace Arinc424
