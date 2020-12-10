@@ -14,7 +14,7 @@ namespace Arinc424
         AeroPublication();
         ~AeroPublication();
 
-      private:
+      public:
         std::list<Airport> airports;
         MetaData metaData;
     };

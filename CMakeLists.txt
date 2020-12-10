@@ -29,11 +29,11 @@ add_library(
   inc/Records/Legs.h
   inc/Records/MetaData.h                        src/Records/MetaData.cpp
   inc/Records/MSA.h
-  inc/Records/Navaids.h
+  inc/Records/Navaids.h                         src/Records/Navaids.cpp
   inc/Records/PathPoint.h
   inc/Records/Ports.h                           src/Records/Ports.cpp
-  inc/Records/Route.h
-  inc/Records/SIDSTARApproach.h
+  inc/Records/Route.h                           src/Records/Route.cpp
+  inc/Records/SIDSTARApproach.h                 src/Records/SIDSTARApproach.cpp
   inc/Records/TAA.h
   inc/Records/Waypoint.h
 )

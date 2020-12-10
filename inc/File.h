@@ -89,7 +89,11 @@ namespace Arinc424
 
       /// \brief Processes one PA record
       /// \returns true if the record is properly formatted; false otherwise.
-      bool processAirportRecord(const std::string &record);
+      bool processAirportRecord(const std::string& record);
+
+      /// \brief Decodes a fixed-length PA record
+      /// \returns true if the record is properly formatted; false otherwise.
+      bool decodeAirportRecord(const std::string& record, Record::Airport &airport);
 
       /// \brief Processes a tailored record
       /// \returns true if the record is properly formatted; false otherwise.
