@@ -16,8 +16,6 @@ namespace xs
 
   typedef int integer;
   
-  typedef std::string string;
-
   typedef unsigned int unsignedInt;
 
   typedef bool boolean;
@@ -40,8 +38,14 @@ namespace xs
   ///   2002-05-30T09:30:10+06:00
   typedef std::string dateTime;
 
+  /// W3C XML Schema String Data Type Hierarchy
+  typedef std::string string;
+
   ///
-  typedef string token;
+  typedef string normalizedString;
+
+  ///
+  typedef normalizedString token;
 
   ///
   typedef token language;
