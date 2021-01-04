@@ -3,6 +3,7 @@
 #include "Enumerations.h"
 #include "../xs.h"
 #include <list>
+#include <ostream>
 
 namespace Arinc424
 {
@@ -186,6 +187,9 @@ namespace Arinc424
     /// There is no “AREA” in such records.
     typedef xs::string CustomerCode;
 
+    /// To serialize the CustomerCode to exactly 3 characters.
+    std::ostream &operator<<(std::ostream &os, const CustomerCode &customerCode);
+
     /// The “Customer Area Code” field permits the categorization of standard records by geographical area
     /// and of tailored records by the airlines for whom they are provided in the master file.
     /// Several record types do not adhere to the established geographical boundaries.
@@ -194,12 +198,18 @@ namespace Arinc424
     {
       public:
         CustAreaCode();
+        explicit CustAreaCode(const std::string &s);
         virtual ~CustAreaCode();
 
-      private:
+        bool operator==(const CustAreaCode &custAreaCode) const;
+
+      public:
         Enum::AreaCode areaCode;
         CustomerCode customerCode;
     };
+
+    /// To serialize a CustAreaCode object
+    std::ostream &operator<<(std::ostream &os, const CustAreaCode &custAreaCode);
 
     /// The "Cycle Date" field identifies the calendar period in which the record was added to the file or last revised.
     /// A change in any ARINC 424 field, except Dynamic Magnetic Variation, Frequency Protection, Continuation Record Number and File Record Number, requires a cycle date change.

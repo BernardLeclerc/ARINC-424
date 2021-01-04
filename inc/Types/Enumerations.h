@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../xs.h"
+#include <ostream>
 
 namespace Arinc424
 {
@@ -162,6 +163,7 @@ namespace Arinc424
     /// There is no “AREA” in such records.
     enum class AreaCode
     {
+      Undefined,
       AFR, ///< Africa
       CAN, ///< Canada
       EEU, ///< Eastern Europe and Asia
@@ -173,6 +175,12 @@ namespace Arinc424
       SPA, ///< South Pacific
       USA  ///< United States
     };
+
+    /// Converts a string into its corresponding AreaCode enumeration
+    AreaCode getAreaCode(const std::string& s);
+
+    /// Converts an AreaCode enumeration into the corresponding string
+    std::ostream & operator<<(std::ostream &os, AreaCode areacode);
 
     /// The ATC Indicator field will be used to indicate that the altitudes shown in the altitude fields can be modified by ATC or the altitude will be assigned by ATC.
     enum class ATCIndicator
@@ -846,18 +854,25 @@ namespace Arinc424
     /// It is not an indication of an operational radar frequency.
     enum class Radar
     {
+      Unknown,            ///< If the Source documentation does not provide details on the radar information access for the services
       PrimaryOrSecondary, ///< Primary or secondary Radar information is available to the service
-      No,                 ///< If the Service documentation specifically states that the service does not have access to primary or secondary radar information
-      Unknown             ///< If the Source documentation does not provide details on the radar information access for the services
+      No                  ///< If the Service documentation specifically states that the service does not have access to primary or secondary radar information
     };
 
     /// The “Record Type” field content indicates whether the record data are “standard,” i.e., suitable for universal application, or “tailored,” i.e. included on the master file for a single user’s specific purpose.
     /// Record type is set to tailored if any extension points are included in the record or if any ARINC 424 XML schemas are modified.
     enum class RecordType
     {
+      Unknown,
       Standard,
       Tailored
     };
+
+    /// Converts a single character into the corresponding Record Type enumeration
+    RecordType getRecordType(const char c);
+
+    /// Converts a RecordType enumeration into its corresponding character
+    std::ostream& operator<<(std::ostream &os, const RecordType &recordType);
 
     /// Indicates that the start or end time is relative to sunset or sunrise.
     enum class RelativeTimeIndicator

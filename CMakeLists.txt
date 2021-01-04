@@ -18,7 +18,7 @@ add_library(
   inc/Reader.h                                  src/Reader.cpp
 
   inc/Types/DataTypes.h                         src/Types/DataTypes.cpp
-  inc/Types/Enumerations.h
+  inc/Types/Enumerations.h                      src/Types/Enumerations.cpp
 
   inc/Records/AeroPublication.h                 src/Records/AeroPublication.cpp
   inc/Records/AirportGate.h                     src/Records/AirportGate.cpp

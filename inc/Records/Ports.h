@@ -51,7 +51,7 @@ namespace Arinc424
         Port();
         virtual ~Port();
 
-      private:
+      public:
         Type::Elevation elevation; 
         Type::ATAIATADesignator ataIATADesignator;
         Type::DaylightIndicator daylightIndicator;
@@ -133,7 +133,7 @@ namespace Arinc424
         Airport();
         virtual ~Airport();
 
-      private:
+      public:
         Type::PointReference           controlledASArptIndicator;
         Enum::ControlledASIndicator    controlledASIndicator;
         Type::LongestRunway            longestRunway;
@@ -149,8 +149,8 @@ namespace Arinc424
         Heliport();
         virtual ~Heliport();
 
-      private:
-        ///This element provies information as to what type of heliport the facility is.
+      public:
+        /// This element provides information as to what type of heliport the facility is.
         Enum::HeliportType heliportType;
     };
   }

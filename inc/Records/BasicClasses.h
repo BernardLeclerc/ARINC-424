@@ -39,7 +39,7 @@ namespace Arinc424
         A424Record();
         virtual ~A424Record();
 
-      private:
+      public:
         Type::CustAreaCode custAreaCode;
         Type::CycleDate cycleDate;
         std::list<Type::NotesText> notes;
@@ -52,7 +52,7 @@ namespace Arinc424
         A424Point();
         virtual ~A424Point();
 
-      private:
+      public:
         Enum::DatumCode datumCode;
         Type::IcaoCode icaoCode;
         Type::CoreIdentifier identifier;

@@ -1,6 +1,9 @@
 #include "Types/DataTypes.h"
 using namespace Arinc424::Type;
 
+#include <iomanip>
+using namespace std;
+
 AdditionalSectorization::AdditionalSectorization() {}
 AdditionalSectorization::~AdditionalSectorization() {}
 
@@ -43,6 +46,24 @@ Course::~Course() {}
 
 CustAreaCode::CustAreaCode() {}
 CustAreaCode::~CustAreaCode() {}
+
+CustAreaCode::CustAreaCode(const string &s)
+{
+  areaCode = Enum::getAreaCode(s);
+  customerCode = s;
+}
+
+bool CustAreaCode::operator==(const CustAreaCode& custAreaCode) const
+{
+  return
+    areaCode != custAreaCode.areaCode ?
+      false
+    :
+      areaCode == Enum::AreaCode::Undefined ?
+        customerCode == custAreaCode.customerCode
+      :
+        true;
+}
 
 Frequency::Frequency() {}
 Frequency::~Frequency() {}
@@ -127,3 +148,26 @@ WaypointType::~WaypointType() {}
 
 WaypointUsage::WaypointUsage() {}
 WaypointUsage::~WaypointUsage() {}
+
+namespace Arinc424
+{
+  namespace Type
+  {
+    ostream& operator<<(ostream& os, const CustomerCode& customerCode)
+    {
+      return os << setw(3) << customerCode.substr(0, 3);
+    }
+
+    ostream& operator<<(ostream& os, const CustAreaCode& custAreaCode)
+    {
+      if (custAreaCode.areaCode == Enum::AreaCode::Undefined)
+      {
+        return os << custAreaCode.customerCode;
+      }
+      else
+      {
+        return os << custAreaCode.areaCode;
+      }
+    }
+  }
+}

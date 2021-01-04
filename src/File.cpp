@@ -19,8 +19,8 @@ using std::string;
 
 namespace
 {
-  /// \brief Converts a character string into an integer
-  /// \returns 0 when the convertion fails
+  // Converts a character string into an integer
+  // Returns 0 if the convertion fails
   int parseInt(const string &s)
   {
     istringstream is(s);
@@ -57,6 +57,35 @@ namespace
   {
     clog << "Function '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
     return false;
+  }
+
+  // Returns true if the fields from column 1 thru 21 of the raw record correspond to the data stored in the provided airport record.
+  bool areFieldsAsOnAirportPrimaryRecord(const string &record, const Record::Airport &airport)
+  {
+    return
+      airport.recordType == Enum::getRecordType(record[0]) &&
+      airport.custAreaCode == Type::CustAreaCode(record.substr(1, 3)) &&
+      record[4] == 'P' &&
+      record[5] == ' ' &&
+      airport.identifier == record.substr(6, 4) &&
+      airport.icaoCode == record.substr(10, 2) &&
+      record[12] == 'A' &&
+      airport.ataIATADesignator == record.substr(13, 3) &&
+      isBlank(record.substr(18, 3));
+  }
+
+  // Returns true if the Continuation Record Number is in the set [0-9] or [A-Z]
+  bool isValidContinuationRecordNumber(const char continuationRecordNumber)
+  {
+    return
+      (continuationRecordNumber >= '0' && continuationRecordNumber <= '9') ||
+      (continuationRecordNumber >= 'A' && continuationRecordNumber <= 'Z');
+  }
+
+  // Returns true if the continuation record number identifies a primary record
+  bool isPrimaryRecordNumber(const char continuationRecordNumber)
+  {
+    return continuationRecordNumber == '0' || continuationRecordNumber == '1';
   }
 }
 
@@ -293,13 +322,26 @@ namespace Arinc424
   /// PA records
   bool File::processAirportRecord(const string &record)
   {
-    Record::Airport airport;
+    bool success = false;
 
-    bool success = decodeAirportRecord(record, airport);
+    char continuationRecordNumber = record[21];
 
-    if (success)
+    // Is this a primary or continuation record?
+    if (continuationRecordNumber == '0' || continuationRecordNumber == '1')
     {
-      aeroPublication.airports.push_back(airport);
+      Record::Airport newAirport;
+      aeroPublication.airports.push_back(newAirport);
+    }
+    else if (aeroPublication.airports.empty())
+    {
+      log(Error) << "Continuation record found without the corresponding primary record." << endl;
+      success = false;
+    }
+    else
+    {
+      /// \todo check the sequence of record numbers: 1, 2, ..., 9, A, ..., Z
+      /// \todo verify that fields from column 1 thru 21 are the same as on the primary record
+      success = decodeAirportRecord(record, aeroPublication.airports.back());
     }
 
     return success;
@@ -308,8 +350,81 @@ namespace Arinc424
   ///
   bool File::decodeAirportRecord(const string &record, Record::Airport &airport)
   {
-    log(Error) << "Method '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
-    return false;
+    bool valid = true;
+
+    // Ref: 5.2
+    airport.recordType = Enum::getRecordType(record[0]);
+
+    // Ref: 5.3
+    switch (airport.recordType)
+    {
+      case Enum::RecordType::Standard:
+        airport.custAreaCode.areaCode = Enum::getAreaCode(record.substr(1, 3));
+        airport.custAreaCode.customerCode = record.substr(1, 3);
+        valid &= airport.custAreaCode.areaCode != Enum::AreaCode::Undefined;
+        break;
+
+      case Enum::RecordType::Tailored:
+        airport.custAreaCode.areaCode = Enum::AreaCode::Undefined;
+        airport.custAreaCode.customerCode = record.substr(1, 3);
+        valid &= !isBlank(airport.custAreaCode.customerCode);
+        break;
+
+      default:
+        valid = false;
+    }
+
+    // Ref: 5.16
+    char continuationRecordNumber = record[21];
+    valid &= isValidContinuationRecordNumber(continuationRecordNumber);
+
+    if (valid)
+    {
+      if (isPrimaryRecordNumber(continuationRecordNumber))
+      {
+        // Ref: 5.6
+        airport.identifier = record.substr(6, 4);
+        valid &= !isBlank(airport.identifier);
+
+        // Ref: 5.14
+        airport.icaoCode = record.substr(10, 2);
+        valid &= !isBlank(airport.icaoCode);
+
+        // Ref: 5.107
+        airport.ataIATADesignator = record.substr(13, 3);
+      }
+      else
+      {
+        // Make sure this is a continuation record of the current airport
+        if (areFieldsAsOnAirportPrimaryRecord(record, airport))
+        {
+          //
+        }
+
+        // Error - This otherwise valid continuation record is not related to the previous records.
+        else
+        {
+          log(Error) << "Not a continuation record of the current airport" << endl;
+          log(Error) << "Current Airport:" << endl;
+          log(Error) << "  Record Type: " << airport.recordType << endl;
+          log(Error) << "  Area/Customer Code: " << airport.custAreaCode << endl;
+          log(Error) << "  Airport ICAO Identifier: " << airport.identifier << endl;
+          log(Error) << "  ICAO Code: " << airport.icaoCode << endl;
+          log(Error) << "  ATA/IATA Designator: " << airport.ataIATADesignator << endl;
+          log(Error) << "First 21 characters of the continuation record: " << record.substr(0,21) << endl;
+          valid = false;
+        }
+      }
+      
+    }
+    else
+    {
+      log(Error) << "This is not a valid continuation record number: '" << continuationRecordNumber << '\'' << endl;
+      log(Error) << "Valid range is '0' thru '9' and 'A' thru 'Z'." << endl;
+    }
+    
+
+    return valid;
   }
 
   /// \todo Implement processTailoredRecord
