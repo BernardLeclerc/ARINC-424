@@ -8,7 +8,6 @@ using std::isdigit;
 
 #include <iostream>
 using std::istream;
-using std::ostream;
 using std::clog;
 using std::endl;
 
@@ -451,7 +450,7 @@ namespace Arinc424
     return false;
   }
 
-  bool File::processHeader01(const std::string &record)
+  bool File::processHeader01(const string &record)
   {
     bool valid = true;
 
@@ -512,7 +511,7 @@ namespace Arinc424
     return valid;
   }
 
-  bool File::processHeader02(const std::string &record)
+  bool File::processHeader02(const string &record)
   {
     bool valid = true;
 
