@@ -1,4 +1,5 @@
 #include "File.h"
+#include "Logger.h"
 #include "Records/Ports.h"
 using namespace Arinc424;
 
@@ -92,15 +93,14 @@ namespace
 namespace Arinc424
 {
   File::File()
-      : status(-1),
-        inputFormat(UnknownFormat),
-        outputFormat(UnknownFormat),
-        logStream(&clog),
-        numRecords(0),
-        numIncorrectRecords(0),
-        numStandardRecords(0),
-        numTailoredRecords(0),
-        numHeaderRecords(0)
+  : status(-1),
+    inputFormat(UnknownFormat),
+    outputFormat(UnknownFormat),
+    numRecords(0),
+    numIncorrectRecords(0),
+    numStandardRecords(0),
+    numTailoredRecords(0),
+    numHeaderRecords(0)
   {
   }
 
@@ -132,21 +132,6 @@ namespace Arinc424
     return is;
   }
 
-  std::ostream &operator<<(std::ostream &os, File::LogCodes code)
-  {
-    switch (code)
-    {
-    case File::LogCodes::Error:
-      return os << "Error";
-
-    case File::LogCodes::Warning:
-      return os << "Warning";
-
-    default:
-      return os << int(code);
-    }
-  }
-
   bool File::ok() const
   {
     return status == 0;
@@ -172,7 +157,7 @@ namespace Arinc424
 
       case Format::UnknownFormat:
       default:
-        log(Error) << "Cannot load an Arinc424::File object from an input stream when the input format is unknown." << endl;
+        log(Logger::Level::Error) << "Cannot load an Arinc424::File object from an input stream when the input format is unknown." << endl;
         return false;
     }
   }
@@ -201,7 +186,7 @@ namespace Arinc424
         // ... unless it's the end of the stream.
         if (!is.eof())
         {
-          log(Error) << "Unexpected number of characters on line " << numRecords << ": " << is.gcount() << endl;
+          log(Logger::Level::Error) << "Unexpected number of characters on line " << numRecords << ": " << is.gcount() << endl;
           break;
         }
         
@@ -245,7 +230,7 @@ namespace Arinc424
         }
         else
         {
-          log(Warning) << "Unrecognized ARINC-424 Supplement 22 record: '" << record << '\'' << endl;
+          log(Logger::Level::Warning) << "Unrecognized ARINC-424 Supplement 22 record: '" << record << '\'' << endl;
           unknownRecordList.push_back(record);
         }
       }
@@ -265,7 +250,7 @@ namespace Arinc424
       case 'D':
       case 'E':
       case 'H':
-        log(Error) << "Section '" << section << "' not decoded yet." << endl;
+        log(Logger::Level::Error) << "Section '" << section << "' not decoded yet." << endl;
         break;
 
       case 'P': return processAirportSection(record);
@@ -273,11 +258,11 @@ namespace Arinc424
       case 'R':
       case 'T':
       case 'U':
-        log(Error) << "Section '" << section << "' not decoded yet." << endl;
+        log(Logger::Level::Error) << "Section '" << section << "' not decoded yet." << endl;
         break;
 
       default:
-        log(Error) << "Unrecognized Section Code '" << section << '\'' << endl;
+        log(Logger::Level::Error) << "Unrecognized Section Code '" << section << '\'' << endl;
         break;
      }
 
@@ -309,11 +294,11 @@ namespace Arinc424
       case 'S':
       case 'T':
       case 'V':
-        log(Error) << "Airport Subsection '" << subsection << "' not decoded yet." << endl;
+        log(Logger::Level::Error) << "Airport Subsection '" << subsection << "' not decoded yet." << endl;
         break;
 
       default:
-        log(Error) << "Unrecognized Subsection Code '" << subsection << '\'' << endl;
+        log(Logger::Level::Error) << "Unrecognized Subsection Code '" << subsection << '\'' << endl;
     }
 
     return false;
@@ -334,7 +319,7 @@ namespace Arinc424
     }
     else if (aeroPublication.airports.empty())
     {
-      log(Error) << "Continuation record found without the corresponding primary record." << endl;
+      log(Logger::Level::Error) << "Continuation record found without the corresponding primary record." << endl;
       success = false;
     }
     else
@@ -404,14 +389,14 @@ namespace Arinc424
         // Error - This otherwise valid continuation record is not related to the previous records.
         else
         {
-          log(Error) << "Not a continuation record of the current airport" << endl;
-          log(Error) << "Current Airport:" << endl;
-          log(Error) << "  Record Type: " << airport.recordType << endl;
-          log(Error) << "  Area/Customer Code: " << airport.custAreaCode << endl;
-          log(Error) << "  Airport ICAO Identifier: " << airport.identifier << endl;
-          log(Error) << "  ICAO Code: " << airport.icaoCode << endl;
-          log(Error) << "  ATA/IATA Designator: " << airport.ataIATADesignator << endl;
-          log(Error) << "First 21 characters of the continuation record: " << record.substr(0,21) << endl;
+          log(Logger::Level::Error) << "Not a continuation record of the current airport" << endl;
+          log(Logger::Level::Error) << "Current Airport:" << endl;
+          log(Logger::Level::Error) << "  Record Type: " << airport.recordType << endl;
+          log(Logger::Level::Error) << "  Area/Customer Code: " << airport.custAreaCode << endl;
+          log(Logger::Level::Error) << "  Airport ICAO Identifier: " << airport.identifier << endl;
+          log(Logger::Level::Error) << "  ICAO Code: " << airport.icaoCode << endl;
+          log(Logger::Level::Error) << "  ATA/IATA Designator: " << airport.ataIATADesignator << endl;
+          log(Logger::Level::Error) << "First 21 characters of the continuation record: " << record.substr(0, 21) << endl;
           valid = false;
         }
       }
@@ -419,10 +404,9 @@ namespace Arinc424
     }
     else
     {
-      log(Error) << "This is not a valid continuation record number: '" << continuationRecordNumber << '\'' << endl;
-      log(Error) << "Valid range is '0' thru '9' and 'A' thru 'Z'." << endl;
+      log(Logger::Level::Error) << "This is not a valid continuation record number: '" << continuationRecordNumber << '\'' << endl;
+      log(Logger::Level::Error) << "Valid range is '0' thru '9' and 'A' thru 'Z'." << endl;
     }
-    
 
     return valid;
   }
@@ -431,7 +415,7 @@ namespace Arinc424
   bool File::processTailoredRecord(const string &record)
   {
     ++numTailoredRecords;
-    log(Error) << "Method '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
+    log(Logger::Level::Error) << "Method '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
     return true;
   }
 
@@ -459,7 +443,7 @@ namespace Arinc424
         }
         else
         {
-          log(Error) << "Invalid header number: '" << record.substr(3, 2) << '\'' << endl;
+          log(Logger::Level::Error) << "Invalid header number: '" << record.substr(3, 2) << '\'' << endl;
         }
         
     }
@@ -554,5 +538,4 @@ namespace Arinc424
 
     return valid;
   }
-
 }

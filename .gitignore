@@ -1,4 +1,6 @@
 build/**
+data/CIFP_200910/**
+data/*.gsd
+doc/ARINC 424**
 doc/ARINC424**
 doc/html/**
-data/CIFP_200910/**

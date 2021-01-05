@@ -15,6 +15,7 @@ add_library(
 
   inc/File.h                                    src/File.cpp
   inc/Header.h                                  src/Header.cpp
+  inc/Logger.h                                  src/Logger.cpp
   inc/Reader.h                                  src/Reader.cpp
 
   inc/Types/DataTypes.h                         src/Types/DataTypes.cpp

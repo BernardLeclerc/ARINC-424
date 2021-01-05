@@ -106,19 +106,6 @@ namespace Arinc424
       bool processHeader01(const std::string &record);
       bool processHeader02(const std::string &record);
 
-      enum LogCodes
-      {
-        Error,
-        Warning
-      };
-
-      friend std::ostream &operator<<(std::ostream &os, LogCodes code);
-
-      std::ostream &log(LogCodes code)
-      {
-        return *logStream << code << " - ";
-      }
-      
     private:
       // The internal status of the File object:
       //  -1 = empty - the object contains no data
@@ -131,9 +118,6 @@ namespace Arinc424
 
       // The output format used by the insertion operator; defaults to the same as the input format
       Format outputFormat;
-
-      // The output stream used to log messages; defaults to std::clog
-      std::ostream *logStream;
 
       // The number of fixed length records (lines) read from the input stream.
       size_t numRecords;
@@ -166,6 +150,4 @@ namespace Arinc424
   /// This insertion operator writes an Arinc424::File to a standard output stream.
   /// The output format is controlled by the state of the File object.
   std::ostream &operator<<(std::ostream &os, File &file);
-
-  std::ostream &operator<<(std::ostream &os, File::LogCodes code);
 }
