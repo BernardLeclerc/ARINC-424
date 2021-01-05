@@ -38,25 +38,42 @@ namespace
            ((cycleDate[2] == '0' && cycleDate[3] != '0') || (cycleDate[2] == '1' && cycleDate[3] <= '4'));
   }
 
-  /// Format is DD-MMM-YYYY
+  /// Section 6.2.1 defines the date format: DD-MMM-YYYY
+  bool isMonthValid(const string &month)
+  {
+    return
+      month == "JAN" || month == "FEB" || month == "MAR" || month == "APR" ||
+      month == "MAY" || month == "JUN" || month == "JUL" || month == "AUG" ||
+      month == "SEP" || month == "OCT" || month == "NOV" || month == "DEC";
+  }
+
   bool isDateValid(const string &date)
   {
-    clog << "Function '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
-    return false;
+    return
+      date.length() == 11 &&
+      isdigit(date[0]) && isdigit(date[1]) &&
+      date[2] == '-' &&
+      isMonthValid(date.substr(3, 3)) &&
+      date[6] == '-' &&
+      isdigit(date[7]) && isdigit(date[8]) && isdigit(date[9]) && isdigit(date[10]);
   }
 
-  /// \todo implement isTimeValid
+  /// Section 6.2.1 defines the time format: hh:mm:ss
   bool isTimeValid(const string &time)
   {
-    clog << "Function '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
-    return false;
+    return
+      time.length() == 8 &&
+      isdigit(time[0]) && isdigit(time[1]) &&
+      time[2] == ':' &&
+      isdigit(time[3]) && isdigit(time[4]) &&
+      time[5] == ':' &&
+      isdigit(time[6]) && isdigit(time[7]);
   }
 
-  /// \todo implement isBlank
+  /// Return true if the string is not empty and contains only blank characters
   bool isBlank(const string &s)
   {
-    clog << "Function '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
-    return false;
+    return !s.empty() && s.find_first_not_of(' ') == string::npos;
   }
 
   // Returns true if the fields from column 1 thru 21 of the raw record correspond to the data stored in the provided airport record.
@@ -306,8 +323,6 @@ namespace Arinc424
   /// PA records
   bool File::processAirportRecord(const string &record)
   {
-    bool success = false;
-
     char continuationRecordNumber = record[21];
 
     // Is this a primary or continuation record?
@@ -319,16 +334,10 @@ namespace Arinc424
     else if (aeroPublication.airports.empty())
     {
       log(Logger::Level::Error) << "Continuation record found without the corresponding primary record." << endl;
-      success = false;
-    }
-    else
-    {
-      /// \todo check the sequence of record numbers: 1, 2, ..., 9, A, ..., Z
-      /// \todo verify that fields from column 1 thru 21 are the same as on the primary record
-      success = decodeAirportRecord(record, aeroPublication.airports.back());
+      return false;
     }
 
-    return success;
+    return decodeAirportRecord(record, aeroPublication.airports.back());
   }
 
   ///

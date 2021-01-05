@@ -34,6 +34,12 @@ namespace Arinc424
         return numIncorrectRecords;
       }
 
+      /// \returns The number of fixed-length header records that are not properly formatted
+      size_t getNumHeaderRecords() const
+      {
+        return numHeaderRecords;
+      }
+
       /// To determine what input format has been detected and what output format will be used.
       enum Format
       {
