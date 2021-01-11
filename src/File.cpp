@@ -153,12 +153,9 @@ namespace Arinc424
     return status == 0;
   }
 
-  /// \todo The semantic is not well-defined.
-  /// \todo The confusion comes from reading an empty stream; should the file be considered empty ?
-  /// \todo Should the meaning of empty be related to the input stream that was used to build the object ? Or should it be solely defined by the content of the File object ?
   bool File::empty() const
   {
-    return status == -1;
+    return aeroPublication.empty();
   }
 
   bool File::load(istream &is)

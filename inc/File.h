@@ -16,10 +16,11 @@ namespace Arinc424
       File();
       ~File();
 
-      /// \returns True if no file or input stream has been processed yet; false otherwise.
+      /// \returns True when aeroPublication is empty.
       bool empty() const;
 
       /// \returns True if the input stream has been parsed successfully; false otherwise.
+      /// \todo Review the need for ok(); is it useful ?
       bool ok() const;
 
       /// \returns The number of fixed-length records extracted from the input stream
@@ -113,6 +114,8 @@ namespace Arinc424
       bool processHeader02(const std::string &record);
 
     private:
+      /// \todo Review the semantic of status because it is not clear why and how the variable would be used.
+
       // The internal status of the File object:
       //  -1 = empty - the object contains no data
       //   0 = successfully loaded - the object contains useful data

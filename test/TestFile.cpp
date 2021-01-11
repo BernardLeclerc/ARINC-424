@@ -44,7 +44,7 @@ namespace Arinc424TestSuite
     File file;
     is >> file;
     EXPECT_TRUE(file.ok());
-    EXPECT_FALSE(file.empty());
+    EXPECT_TRUE(file.empty());
     EXPECT_EQ(0, file.getNumRecords());
     EXPECT_EQ(0, file.getNumHeaderRecords());
     EXPECT_EQ(0, file.getNumIncorrectRecords());
@@ -63,7 +63,7 @@ namespace Arinc424TestSuite
     File file;
     ss >> file;
     EXPECT_TRUE(file.ok());
-    EXPECT_FALSE(file.empty());
+    EXPECT_TRUE(file.empty());
     EXPECT_EQ(5, file.getNumRecords());
     EXPECT_EQ(5, file.getNumHeaderRecords());
     EXPECT_EQ(0, file.getNumIncorrectRecords());
@@ -78,7 +78,7 @@ namespace Arinc424TestSuite
     File file;
     ss >> file;
     EXPECT_TRUE(file.ok());
-    EXPECT_FALSE(file.empty());
+    EXPECT_TRUE(file.empty());
     EXPECT_EQ(1, file.getNumRecords());
     EXPECT_EQ(1, file.getNumHeaderRecords());
     EXPECT_EQ(1, file.getNumIncorrectRecords());
