@@ -29,7 +29,7 @@ namespace Arinc424TestSuite
   TEST(File, InitialState)
   {
     File file;
-    EXPECT_FALSE(file.ok());
+    EXPECT_TRUE(file.ok());
     EXPECT_TRUE(file.empty());
     EXPECT_EQ(0, file.getNumRecords());
     EXPECT_EQ(0, file.getNumHeaderRecords());

@@ -109,7 +109,7 @@ namespace
 namespace Arinc424
 {
   File::File()
-  : status(-1),
+  : status(0),
     inputFormat(UnknownFormat),
     outputFormat(UnknownFormat),
     numRecords(0),
@@ -133,7 +133,7 @@ namespace Arinc424
     file.inputFormat = file.outputFormat = File::Format::FixedLengthFormat;
 
     // If the file loads successfully, we're good !!
-    if (file.load(is)) return is;
+    if (file.loadFromFixedLenght(is)) return is;
 
     // Attempt to rewind the stream ...
     is.seekg(0);
@@ -141,7 +141,7 @@ namespace Arinc424
 
     // ... and try an XML format
     file.inputFormat = file.outputFormat = File::Format::XmlFormat;
-    if (file.load(is)) return is;
+    if (file.loadFromXmlFormat(is)) return is;
 
     // Apparently, the input stream has an unsupported format
     file.inputFormat = file.outputFormat = File::Format::UnknownFormat;
@@ -156,23 +156,6 @@ namespace Arinc424
   bool File::empty() const
   {
     return aeroPublication.empty();
-  }
-
-  bool File::load(istream &is)
-  {
-    switch(inputFormat)
-    {
-      case Format::FixedLengthFormat:
-        return loadFromFixedLenght(is);
-
-      case Format::XmlFormat:
-        return loadFromXmlFormat(is);
-
-      case Format::UnknownFormat:
-      default:
-        log(Logger::Level::Error) << "Cannot load an Arinc424::File object from an input stream when the input format is unknown." << endl;
-        return false;
-    }
   }
 
   bool File::loadFromFixedLenght(istream &is)
@@ -216,7 +199,8 @@ namespace Arinc424
   /// \todo Implement loadFromXmlFormat()
   bool File::loadFromXmlFormat(istream &is)
   {
-    return false;
+    status = 1;
+    return ok();
   }
 
   bool File::processRecord(const char line[])

@@ -19,8 +19,7 @@ namespace Arinc424
       /// \returns True when aeroPublication is empty.
       bool empty() const;
 
-      /// \returns True if the input stream has been parsed successfully; false otherwise.
-      /// \todo Review the need for ok(); is it useful ?
+      /// \returns True if the last operation on a stream was successful; false otherwise.
       bool ok() const;
 
       /// \returns The number of fixed-length records extracted from the input stream
@@ -68,17 +67,12 @@ namespace Arinc424
       friend std::ostream &operator<<(std::ostream &os, File &file);
 
     private:
-      /// \brief Uses the indicated format to build the File object from the input stream.
-      /// \details load is a wrapper for loadFromXmlFormat and loadFromFixedLenght.
-      /// \return true if the File object was successfully loaded; false otherwise.
-      bool load(std::istream &is);
-
       /// \brief Loads the File object from an XML input stream.
-      /// \return true if the File object was successfully loaded; false otherwise.
+      /// \return true if no error occured while reading the input stream; false otherwise.
       bool loadFromXmlFormat(std::istream &is);
 
       /// \brief Loads the File object from a 132-character fixed length input stream.
-      /// \return true if the File object was successfully loaded; false otherwise.
+      /// \return true if no error occured while reading the input stream; false otherwise.
       bool loadFromFixedLenght(std::istream &is);
 
       /// \brief Processes one line obtained from the input stream.
@@ -114,12 +108,9 @@ namespace Arinc424
       bool processHeader02(const std::string &record);
 
     private:
-      /// \todo Review the semantic of status because it is not clear why and how the variable would be used.
-
-      // The internal status of the File object:
-      //  -1 = empty - the object contains no data
-      //   0 = successfully loaded - the object contains useful data
-      //   1 = unsuccessfully loaded - the object may (or may not) contain data that may (or may not) be useful
+      /// The status of the last operation on the File object through the insertion or extraction operators
+      ///   0 = last operation succeeded
+      ///   1 = last operation failed
       int status;
 
       // The input format detected be the extraction operator

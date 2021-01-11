@@ -40,12 +40,4 @@ namespace Arinc424TestSuite
     istringstream is;
     ASSERT_TRUE(reader.load(is));
   }
-
-  TEST(Reader, InitialState)
-  {
-    Reader reader;
-    File &file = reader.getFile();
-    ASSERT_TRUE(file.empty());
-    ASSERT_FALSE(file.ok());
-  }
 }
