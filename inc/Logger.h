@@ -12,7 +12,7 @@ namespace Arinc424
       static Logger &instance();
 
       /// To specify the nature of the message
-      enum Level
+      enum class Level
       {
         Error,
         Warning,

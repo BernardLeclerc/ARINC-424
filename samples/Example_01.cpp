@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
   }
 
   // You can now process the data that is contained in the Arinc424::File object :-)
-  if (arinc424File.getInputFormat() == Arinc424::File::FixedLengthFormat)
+  if (arinc424File.getInputFormat() == Arinc424::File::Format::FixedLength)
   {
     cout << "File format detected...................: Fixed Length" << endl;
     cout << "Total number of records................: " << arinc424File.getNumRecords() << endl;

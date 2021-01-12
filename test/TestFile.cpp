@@ -34,8 +34,8 @@ namespace Arinc424TestSuite
     EXPECT_EQ(0, file.getNumRecords());
     EXPECT_EQ(0, file.getNumHeaderRecords());
     EXPECT_EQ(0, file.getNumIncorrectRecords());
-    EXPECT_EQ(File::Format::UnknownFormat, file.getInputFormat());
-    EXPECT_EQ(File::Format::UnknownFormat, file.getOutputFormat());
+    EXPECT_EQ(File::Format::Unknown, file.getInputFormat());
+    EXPECT_EQ(File::Format::Unknown, file.getOutputFormat());
   }
 
   TEST(File, ExtractFromEmptyStream)
@@ -48,8 +48,8 @@ namespace Arinc424TestSuite
     EXPECT_EQ(0, file.getNumRecords());
     EXPECT_EQ(0, file.getNumHeaderRecords());
     EXPECT_EQ(0, file.getNumIncorrectRecords());
-    EXPECT_EQ(File::Format::FixedLengthFormat, file.getInputFormat()) << "An empty stream is considered as having a Fixed Length format.";
-    EXPECT_EQ(File::Format::FixedLengthFormat, file.getOutputFormat()) << "By default, the output format is the same as the input format.";
+    EXPECT_EQ(File::Format::FixedLength, file.getInputFormat()) << "An empty stream is considered as having a Fixed Length format.";
+    EXPECT_EQ(File::Format::FixedLength, file.getOutputFormat()) << "By default, the output format is the same as the input format.";
   }
 
   TEST(File, ExtractHeaderRecords)
@@ -67,8 +67,8 @@ namespace Arinc424TestSuite
     EXPECT_EQ(5, file.getNumRecords());
     EXPECT_EQ(5, file.getNumHeaderRecords());
     EXPECT_EQ(0, file.getNumIncorrectRecords());
-    EXPECT_EQ(File::Format::FixedLengthFormat, file.getInputFormat());
-    EXPECT_EQ(File::Format::FixedLengthFormat, file.getOutputFormat()) << "By default, the output format is the same as the input format.";
+    EXPECT_EQ(File::Format::FixedLength, file.getInputFormat());
+    EXPECT_EQ(File::Format::FixedLength, file.getOutputFormat()) << "By default, the output format is the same as the input format.";
   }
 
   TEST(File, IncorrectHeaderDate)
@@ -82,8 +82,8 @@ namespace Arinc424TestSuite
     EXPECT_EQ(1, file.getNumRecords());
     EXPECT_EQ(1, file.getNumHeaderRecords());
     EXPECT_EQ(1, file.getNumIncorrectRecords());
-    EXPECT_EQ(File::Format::FixedLengthFormat, file.getInputFormat());
-    EXPECT_EQ(File::Format::FixedLengthFormat, file.getOutputFormat()) << "By default, the output format is the same as the input format.";
+    EXPECT_EQ(File::Format::FixedLength, file.getInputFormat());
+    EXPECT_EQ(File::Format::FixedLength, file.getOutputFormat()) << "By default, the output format is the same as the input format.";
   }
 
   TEST(File, ExtractOneAirportRecord)
@@ -96,7 +96,7 @@ namespace Arinc424TestSuite
     EXPECT_FALSE(file.empty());
     EXPECT_EQ(1, file.getNumRecords());
     EXPECT_EQ(0, file.getNumIncorrectRecords());
-    EXPECT_EQ(File::Format::FixedLengthFormat, file.getInputFormat());
-    EXPECT_EQ(File::Format::FixedLengthFormat, file.getOutputFormat()) << "By default, the output format is the same as the input format.";
+    EXPECT_EQ(File::Format::FixedLength, file.getInputFormat());
+    EXPECT_EQ(File::Format::FixedLength, file.getOutputFormat()) << "By default, the output format is the same as the input format.";
   }
 }

@@ -110,8 +110,8 @@ namespace Arinc424
 {
   File::File()
   : status(0),
-    inputFormat(UnknownFormat),
-    outputFormat(UnknownFormat),
+    inputFormat(Format::Unknown),
+    outputFormat(Format::Unknown),
     numRecords(0),
     numIncorrectRecords(0),
     numStandardRecords(0),
@@ -129,8 +129,14 @@ namespace Arinc424
   /// \todo is1 >> file; is2 >> file; ...
   istream &operator>>(istream &is, File &file)
   {
+    // There are two cases to consider whether or not the input format is known
+    switch (file.inputFormat)
+    {
+
+    }
+    
     // Start by assuming a fixed length
-    file.inputFormat = file.outputFormat = File::Format::FixedLengthFormat;
+    file.inputFormat = file.outputFormat = File::Format::FixedLength;
 
     // If the file loads successfully, we're good !!
     if (file.loadFromFixedLenght(is)) return is;
@@ -140,11 +146,11 @@ namespace Arinc424
     if (!is.good()) return is;
 
     // ... and try an XML format
-    file.inputFormat = file.outputFormat = File::Format::XmlFormat;
+    file.inputFormat = file.outputFormat = File::Format::Xml;
     if (file.loadFromXmlFormat(is)) return is;
 
     // Apparently, the input stream has an unsupported format
-    file.inputFormat = file.outputFormat = File::Format::UnknownFormat;
+    file.inputFormat = file.outputFormat = File::Format::Unknown;
     return is;
   }
 

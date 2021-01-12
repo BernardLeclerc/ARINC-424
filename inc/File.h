@@ -40,35 +40,45 @@ namespace Arinc424
         return numHeaderRecords;
       }
 
-      /// To determine what input format has been detected and what output format will be used.
-      enum Format
+      /// To determine what input format has been set or detected and what output format will be used.
+      enum class Format
       {
-        UnknownFormat,
-        FixedLengthFormat,
-        XmlFormat
+        Unknown,
+        FixedLength,
+        Xml
       };
 
-      /// \returns The input format that has been detected
+      /// \returns The input format that has been detected by the last call to the extraction (>>) operator.
+      /// The initial input format is Format::Unknown.
+      /// \see setInputFormat().
       Format getInputFormat() const
       {
         return inputFormat;
       }
 
-      /// \returns The output format that has been detected
+      /// \todo Not defined yet
+      /// \returns The previous input format
+      Format setInputFormat(Format format);
+
+      /// \returns The output format that has been set
+      /// By default, the output format is set to the same value as the input format that is detected.
+      /// If the input format is explicitly set, the output format is left unchanged; that is, it keeps its current value.
+      /// The initial output format is Format::Unknown.
       Format getOutputFormat() const
       {
         return outputFormat;
       }
 
       /// \todo Not defined yet
-      bool setOutputFormat(Format format);
+      /// \returns The previous output format
+      Format setOutputFormat(Format format);
 
       friend std::istream &operator>>(std::istream &is, File &file);
       friend std::ostream &operator<<(std::ostream &os, File &file);
 
     private:
       /// \brief Loads the File object from an XML input stream.
-      /// \return true if no error occured while reading the input stream; false otherwise.
+      /// \returns true if no error occured while reading the input stream; false otherwise.
       bool loadFromXmlFormat(std::istream &is);
 
       /// \brief Loads the File object from a 132-character fixed length input stream.
