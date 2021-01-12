@@ -29,6 +29,7 @@ ostream& Arinc424::operator << (ostream & os, Logger::Level level)
   {
     case Logger::Level::Error:   return os << "Error";
     case Logger::Level::Warning: return os << "Warning";
-    default:                     return os << int(level);
+    case Logger::Level::Info:    return os << "Info";
+    default:                     return os << "Level " << int(level);
   }
 }

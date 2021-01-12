@@ -28,13 +28,13 @@ namespace Arinc424TestSuite
     ASSERT_FALSE(reader.load(nullptr));
   }
 
-  TEST(Reader, LoadFromFile)
+  TEST(Reader, LoadFromNonExistingFile)
   {
     Reader reader;
     ASSERT_FALSE(reader.load("A file that does not exist"));
   }
 
-  TEST(Reader, LoadFromEmptytream)
+  TEST(Reader, LoadFromEmptyStream)
   {
     Reader reader;
     istringstream is;

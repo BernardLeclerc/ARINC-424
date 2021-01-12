@@ -77,9 +77,14 @@ namespace Arinc424
       friend std::ostream &operator<<(std::ostream &os, File &file);
 
     private:
+      /// \brief Loads the File object from an input stream whose format is unknown.
+      /// \details First tries a fixed-length format then, if it fails, tries an XML format.
+      /// \returns true if no error occured while reading the input stream; false otherwise.
+      bool load(std::istream &is);
+
       /// \brief Loads the File object from an XML input stream.
       /// \returns true if no error occured while reading the input stream; false otherwise.
-      bool loadFromXmlFormat(std::istream &is);
+      bool loadFromXml(std::istream& is);
 
       /// \brief Loads the File object from a 132-character fixed length input stream.
       /// \return true if no error occured while reading the input stream; false otherwise.

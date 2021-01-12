@@ -52,6 +52,36 @@ namespace Arinc424TestSuite
     EXPECT_EQ(File::Format::FixedLength, file.getOutputFormat()) << "By default, the output format is the same as the input format.";
   }
 
+  TEST(File, ExtractFromEmptyFixedLengthStream)
+  {
+    istringstream is;
+    File file;
+    file.setInputFormat(File::Format::FixedLength);
+    is >> file;
+    EXPECT_TRUE(file.ok());
+    EXPECT_TRUE(file.empty());
+    EXPECT_EQ(0, file.getNumRecords());
+    EXPECT_EQ(0, file.getNumHeaderRecords());
+    EXPECT_EQ(0, file.getNumIncorrectRecords());
+    EXPECT_EQ(File::Format::FixedLength, file.getInputFormat());
+    EXPECT_EQ(File::Format::Unknown, file.getOutputFormat());
+  }
+
+  TEST(File, ExtractFromEmptyXmlStream)
+  {
+    istringstream is;
+    File file;
+    file.setInputFormat(File::Format::Xml);
+    is >> file;
+    EXPECT_FALSE(file.ok()); // TODO: Change to TRUE when XML implemented
+    EXPECT_TRUE(file.empty());
+    EXPECT_EQ(0, file.getNumRecords());
+    EXPECT_EQ(0, file.getNumHeaderRecords());
+    EXPECT_EQ(0, file.getNumIncorrectRecords());
+    EXPECT_EQ(File::Format::Xml, file.getInputFormat());
+    EXPECT_EQ(File::Format::Unknown, file.getOutputFormat());
+  }
+
   TEST(File, ExtractHeaderRecords)
   {
     stringstream ss;

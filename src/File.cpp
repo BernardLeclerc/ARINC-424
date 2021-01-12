@@ -129,28 +129,21 @@ namespace Arinc424
   /// \todo is1 >> file; is2 >> file; ...
   istream &operator>>(istream &is, File &file)
   {
-    // There are two cases to consider whether or not the input format is known
     switch (file.inputFormat)
     {
+      case File::Format::FixedLength:
+        file.loadFromFixedLenght(is);
+        break;
 
+      case File::Format::Xml:
+        file.loadFromXml(is);
+        break;
+
+      case File::Format::Unknown:
+      default:
+        file.load(is);
     }
-    
-    // Start by assuming a fixed length
-    file.inputFormat = file.outputFormat = File::Format::FixedLength;
 
-    // If the file loads successfully, we're good !!
-    if (file.loadFromFixedLenght(is)) return is;
-
-    // Attempt to rewind the stream ...
-    is.seekg(0);
-    if (!is.good()) return is;
-
-    // ... and try an XML format
-    file.inputFormat = file.outputFormat = File::Format::Xml;
-    if (file.loadFromXmlFormat(is)) return is;
-
-    // Apparently, the input stream has an unsupported format
-    file.inputFormat = file.outputFormat = File::Format::Unknown;
     return is;
   }
 
@@ -162,6 +155,50 @@ namespace Arinc424
   bool File::empty() const
   {
     return aeroPublication.empty();
+  }
+
+  File::Format File::setInputFormat(Format newInputFormat)
+  {
+    Format previousInputFormat = inputFormat;
+    inputFormat = newInputFormat;
+    return previousInputFormat;
+  }
+  
+  bool File::load(istream &is)
+  {
+    // Start by assuming a fixed length
+    inputFormat = outputFormat = Format::FixedLength;
+
+    // If the file loads successfully, we're good !!
+    if (loadFromFixedLenght(is))
+    {
+      log(Logger::Level::Info) << "Fixed-length format detected." << endl;
+      return true;
+    }
+
+    // Attempt to rewind the stream ...
+    is.clear();
+    is.seekg(0);
+    if (is.fail())
+    {
+      log(Logger::Level::Error) << "Failed to rewind the input stream." << endl;
+      status = 1;
+      return false;
+    }
+
+    // ... and try an XML format
+    inputFormat = outputFormat = Format::Xml;
+    if (loadFromXml(is))
+    {
+      log(Logger::Level::Info) << "XML format detected." << endl;
+      return true;
+    }
+
+    // Apparently, the input stream has an unsupported format
+    inputFormat = outputFormat = Format::Unknown;
+    log(Logger::Level::Error) << "Could not detect the format of the input stream." << endl;
+    status = 1;
+    return false;
   }
 
   bool File::loadFromFixedLenght(istream &is)
@@ -202,8 +239,8 @@ namespace Arinc424
     return ok();
   }
 
-  /// \todo Implement loadFromXmlFormat()
-  bool File::loadFromXmlFormat(istream &is)
+  /// \todo Implement loadFromXml()
+  bool File::loadFromXml(istream &is)
   {
     status = 1;
     return ok();
@@ -241,7 +278,6 @@ namespace Arinc424
     return false;
   }
 
-  /// \todo Implement processStandardRecord
   bool File::processStandardRecord(const string &record)
   {
     ++numStandardRecords;
@@ -411,7 +447,7 @@ namespace Arinc424
   {
     ++numTailoredRecords;
     log(Logger::Level::Error) << "Method '" << __PRETTY_FUNCTION__ << "' is not implemented yet." << endl;
-    return true;
+    return false;
   }
 
   bool File::processHeaderRecord(const string &record)
