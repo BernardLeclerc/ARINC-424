@@ -14,6 +14,7 @@ add_library(
   inc/Arinc424.h
 
   inc/File.h                                    src/File.cpp
+  inc/FixedLengthParser.h                       src/FixedLengthParser.cpp
   inc/Header.h                                  src/Header.cpp
   inc/Logger.h                                  src/Logger.cpp
   inc/Reader.h                                  src/Reader.cpp
