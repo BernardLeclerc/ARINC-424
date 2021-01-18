@@ -70,11 +70,15 @@ namespace Arinc424TestSuite
   {
     stringstream ss;
     ss << "HDR01FAACIFP18      001P013203765622010  20-ABC-202011:12:17  U.S.A. DOT FAA                                                61829262" << endl;
+    ss << "HDR02                                 FEDERAL AVIATION ADMINISTRATION                                                               " << endl;
+    ss << "HDR03                                 AERONAUTICAL INFORMATION SERVICES                                                             " << endl;
+    ss << "HDR04                                 CODED INSTRUMENT FLIGHT PROCEDURES VOLUME 2010  EFFECTIVE 10 SEP 2020                         " << endl;
+    ss << "HDR05                                 REPORT DATA ERRORS TO FAA                 TEL 800 638 8972                                    " << endl;
     Record::AeroPublication aeroPublication;
     FixedLengthParser fixedLengthParser(ss, aeroPublication);
     EXPECT_TRUE(fixedLengthParser.parse());
-    EXPECT_EQ(1, fixedLengthParser.getNumRecords());
-    EXPECT_EQ(1, fixedLengthParser.getNumHeaderRecords());
+    EXPECT_EQ(5, fixedLengthParser.getNumRecords());
+    EXPECT_EQ(5, fixedLengthParser.getNumHeaderRecords());
     EXPECT_EQ(1, fixedLengthParser.getNumIncorrectRecords());
     EXPECT_EQ(0, fixedLengthParser.getNumUnknownRecords());
   }
@@ -91,5 +95,61 @@ namespace Arinc424TestSuite
     EXPECT_EQ(0, fixedLengthParser.getNumHeaderRecords());
     EXPECT_EQ(2, fixedLengthParser.getNumIncorrectRecords());
     EXPECT_EQ(2, fixedLengthParser.getNumUnknownRecords());
+  }
+
+  TEST(FixedLengthParser, LineTooShort)
+  {
+    stringstream ss;
+    ss << "HDR01FAACIFP18      001P013203765622010  20-AUG-202011:12:17  U.S.A. DOT FAA                                                61829262" << endl;
+    ss << "HDR02                                 FEDERAL AVIATION ADMINISTRATION                                                               " << endl;
+    ss << "HDR03                                 AERONAUTICAL INFORMATION SERVICES                                                             " << endl;
+    ss << "HDR04                                 CODED INSTRUMENT FLIGHT PROCEDURES VOLUME 2010  EFFECTIVE 10 SEP 2020" << endl;
+    ss << "HDR05                                 REPORT DATA ERRORS TO FAA                 TEL 800 638 8972                                    " << endl;
+    Record::AeroPublication aeroPublication;
+    FixedLengthParser fixedLengthParser(ss, aeroPublication);
+    EXPECT_FALSE(fixedLengthParser.parse());
+    EXPECT_EQ(3, fixedLengthParser.getNumRecords());
+  }
+
+  TEST(FixedLengthParser, LineTooLong)
+  {
+    stringstream ss;
+    ss << "HDR01FAACIFP18      001P013203765622010  20-AUG-202011:12:17  U.S.A. DOT FAA                                                61829262" << endl;
+    ss << "HDR02                                 FEDERAL AVIATION ADMINISTRATION                                                               " << endl;
+    ss << "HDR03                                 AERONAUTICAL INFORMATION SERVICES                                                             -" << endl;
+    ss << "HDR04                                 CODED INSTRUMENT FLIGHT PROCEDURES VOLUME 2010  EFFECTIVE 10 SEP 2020                         " << endl;
+    ss << "HDR05                                 REPORT DATA ERRORS TO FAA                 TEL 800 638 8972                                    " << endl;
+    Record::AeroPublication aeroPublication;
+    FixedLengthParser fixedLengthParser(ss, aeroPublication);
+    EXPECT_FALSE(fixedLengthParser.parse());
+    EXPECT_EQ(2, fixedLengthParser.getNumRecords());
+  }
+
+  TEST(FixedLengthParser, NoEndOfLine)
+  {
+    stringstream ss;
+    ss << "HDR01FAACIFP18      001P013203765622010  20-AUG-202011:12:17  U.S.A. DOT FAA                                                61829262";
+    ss << "HDR02                                 FEDERAL AVIATION ADMINISTRATION                                                               ";
+    ss << "HDR03                                 AERONAUTICAL INFORMATION SERVICES                                                             ";
+    ss << "HDR04                                 CODED INSTRUMENT FLIGHT PROCEDURES VOLUME 2010  EFFECTIVE 10 SEP 2020                         ";
+    ss << "HDR05                                 REPORT DATA ERRORS TO FAA                 TEL 800 638 8972                                    ";
+    Record::AeroPublication aeroPublication;
+    FixedLengthParser fixedLengthParser(ss, aeroPublication);
+    EXPECT_FALSE(fixedLengthParser.parse());
+    EXPECT_EQ(0, fixedLengthParser.getNumRecords());
+  }
+
+  TEST(FixedLengthParser, EOL_newline)
+  {
+    stringstream ss;
+    ss << "HDR01FAACIFP18      001P013203765622010  20-AUG-202011:12:17  U.S.A. DOT FAA                                                61829262\n";
+    ss << "HDR02                                 FEDERAL AVIATION ADMINISTRATION                                                               \n";
+    ss << "HDR03                                 AERONAUTICAL INFORMATION SERVICES                                                             \n";
+    ss << "HDR04                                 CODED INSTRUMENT FLIGHT PROCEDURES VOLUME 2010  EFFECTIVE 10 SEP 2020                         \n";
+    ss << "HDR05                                 REPORT DATA ERRORS TO FAA                 TEL 800 638 8972                                    \n";
+    Record::AeroPublication aeroPublication;
+    FixedLengthParser fixedLengthParser(ss, aeroPublication);
+    EXPECT_TRUE(fixedLengthParser.parse());
+    EXPECT_EQ(5, fixedLengthParser.getNumRecords());
   }
 }

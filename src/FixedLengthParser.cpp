@@ -121,6 +121,8 @@ FixedLengthParser::~FixedLengthParser()
 
 bool FixedLengthParser::parse()
 {
+  size_t lineNo = 0;
+
   while (is.good())
   {
     // A line is a null-terminated string of 132 characters
@@ -128,6 +130,7 @@ bool FixedLengthParser::parse()
 
     // A line from the stream is 132 characters plus the End-Of-Line (EOL) delimiter
     is.getline(line, 133);
+    ++lineNo;
 
     // Check how many characters were actually read
     if (is.gcount() == 133)
@@ -143,7 +146,14 @@ bool FixedLengthParser::parse()
       // ... unless it's the end of the stream.
       if (!is.eof())
       {
-        log(Logger::Level::Error) << "Unexpected number of characters on line " << numRecords << ": " << is.gcount() << endl;
+        if (is.gcount() == 132)
+        {
+          log(Logger::Level::Error) << "Line " << lineNo << " has no EOL or exceeds 132 characters." << endl;
+        }
+        else
+        {
+          log(Logger::Level::Error) << "Line " << lineNo << " is too short: " << is.gcount() << endl;
+        }
         break;
       }
     }
