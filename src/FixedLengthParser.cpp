@@ -195,7 +195,7 @@ bool FixedLengthParser::processStandardRecord(const string &record)
     case 'D':
     case 'E':
     case 'H':
-      log(Logger::Level::Error) << "Section '" << section << "' not decoded yet." << endl;
+      log(Logger::Level::Info) << "Section '" << section << "' not decoded yet." << endl;
       break;
 
     case 'P': return processAirportSection(record);
@@ -203,7 +203,7 @@ bool FixedLengthParser::processStandardRecord(const string &record)
     case 'R':
     case 'T':
     case 'U':
-      log(Logger::Level::Error) << "Section '" << section << "' not decoded yet." << endl;
+      log(Logger::Level::Info) << "Section '" << section << "' not decoded yet." << endl;
       break;
 
     default:
@@ -239,7 +239,7 @@ bool FixedLengthParser::processAirportSection(const string &record)
     case 'S':
     case 'T':
     case 'V':
-      log(Logger::Level::Error) << "Airport Subsection '" << subsection << "' not decoded yet." << endl;
+      log(Logger::Level::Info) << "Airport Subsection '" << subsection << "' not decoded yet." << endl;
       break;
 
     default:
