@@ -36,6 +36,12 @@ namespace Arinc424
         return numHeaderRecords;
       }
 
+      /// \returns The number of fixed-length header records that are not properly formatted
+      size_t getNumUnknownRecords() const
+      {
+        return unknownRecordList.size();
+      }
+
     private:
       /// \brief Processes one line obtained from the input stream.
       /// \details Determines the type of records and then calls the appropriate method.

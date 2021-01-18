@@ -57,6 +57,7 @@ target_link_libraries(Example_01 Arinc424)
 add_executable(
   TestSuite
   test/TestFile.cpp
+  test/TestFixedLengthParser.cpp
   test/TestReader.cpp
   test/TestSuite.cpp
   )
